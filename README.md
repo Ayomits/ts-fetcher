@@ -1,6 +1,7 @@
 # ts-fetcher
 
-TypeScript module for convenient fetch API handling
+TypeScript module for convenient fetch API handling <br>
+RU version -> [link](https://github.com/Ayomits/ts-fetch/blob/master/README.ru.md)
 
 ## Features
 
