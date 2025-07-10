@@ -1,12 +1,15 @@
 {
   "name": "ts-fetcher",
   "module": "true",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "npx tsc --build",
     "format:fix": "prettier --fix ./src"
+  },
+  "repository": {
+    "url": "https://github.com/Ayomits/ts-fetch"
   },
   "devDependencies": {
     "@types/bun": "latest",
