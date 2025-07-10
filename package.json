@@ -1,8 +1,7 @@
 {
   "name": "ts-fetcher",
   "module": "true",
-  "version": "1.0.3",
-  "types": "./dist/types",
+  "version": "1.0.4",
   "main": "./dist/index.js",
   "scripts": {
     "build": "npx tsc --build",
