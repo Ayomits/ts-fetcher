@@ -2,8 +2,8 @@ import { DEFAULT_REST_OPTIONS } from './options';
 import type { ParseBodyType, RequestOptions, RestOptions, RestResponse } from './types';
 
 export class Rest {
-  private origin: string;
-  private restOptions: Partial<RestOptions>;
+  public origin: string;
+  public restOptions: Partial<RestOptions>;
 
   constructor(origin: string, options: Partial<RestOptions> = DEFAULT_REST_OPTIONS) {
     this.origin = origin;
@@ -50,7 +50,7 @@ export class Rest {
     });
   }
 
-  private async request<RES = any, REQ = any>(
+  public async request<RES = any, REQ = any>(
     options: RequestOptions<REQ>
   ): Promise<RestResponse<RES>> {
     if (this.restOptions.cache && options.cache) {
@@ -94,7 +94,7 @@ export class Rest {
     };
   }
 
-  private parseBody(parseAs: ParseBodyType, data: any) {
+  public parseBody(parseAs: ParseBodyType, data: any) {
     switch (parseAs) {
       case 'JSON':
         return JSON.stringify(data);
@@ -103,15 +103,11 @@ export class Rest {
     }
   }
 
-  private async parseJsonResponse<RES = any>(res: Response) {
+  public async parseJsonResponse<RES = any>(res: Response) {
     try {
       return (await res.json()) as RES;
     } catch {
       return null as RES;
     }
   }
-}
-
-export function createRest(origin: string, options: RestOptions) {
-  return new Rest(origin, options);
 }
