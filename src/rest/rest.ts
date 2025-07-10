@@ -1,3 +1,7 @@
+import {
+  chainRequestInterceptors,
+  chainResponseInterceptors,
+} from '@/interceptors/chain-interceptor';
 import { DEFAULT_REST_OPTIONS } from './options';
 import type { ParseBodyType, RequestOptions, RestOptions, RestResponse } from './types';
 
@@ -62,15 +66,20 @@ export class Rest {
         return valueFromCache;
       }
     }
+
+    if (this.restOptions.interceptors?.request?.length) {
+      options = chainRequestInterceptors(options, this.restOptions.interceptors.request);
+    }
+
     const body =
       options.body && options.method !== 'GET'
         ? this.parseBody(options.body.parseAs, options.body.data)
         : null;
 
     const response = await fetch(`${options.origin ?? this.origin}/${options.path}`, {
-      headers: options.headers ?? {},
-      method: options.method,
-      body: body,
+      // @ts-expect-error I hate ts
+      body,
+      ...options,
     });
 
     const formated = {
@@ -88,17 +97,22 @@ export class Rest {
       );
     }
 
-    return {
+    const data: RestResponse<RES> = {
       ...formated,
       cached: false,
     };
+
+    if (this.restOptions.interceptors?.response?.length) {
+      return chainResponseInterceptors(data, this.restOptions.interceptors.response);
+    }
+    return data;
   }
 
   public async invalidate(cacheKey: string) {
     if (!this.restOptions.cache) {
-      throw new Error("Cache is not provided!");
+      throw new Error('Cache is not provided!');
     }
-    await this.restOptions.cache.del(cacheKey)
+    await this.restOptions.cache.del(cacheKey);
   }
 
   public parseBody(parseAs: ParseBodyType, data: any) {

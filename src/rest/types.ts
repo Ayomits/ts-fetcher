@@ -1,10 +1,17 @@
 import { CacheService, LocalCacheService } from '@/cache/types';
+import { RequestInterceptor, ResponseInterceptor } from '@/interceptors/types';
 import { LiteralEnum } from '@/lib/literal-enum';
 
 export type RestCache = CacheService | LocalCacheService;
 
+export interface RestInterceptorsOptions {
+  request?: RequestInterceptor[];
+  response?: ResponseInterceptor[];
+}
+
 export interface RestOptions {
   cache: RestCache;
+  interceptors?: RestInterceptorsOptions;
 }
 
 export const HttpMethod = {
@@ -43,12 +50,23 @@ export interface RequestCacheOptions {
 
 export interface RequestOptions<RB = any, M extends HttpMethod = HttpMethod> {
   path: string;
-  origin?: string;
+  origin?: string | undefined;
   method: M;
-  headers?: Record<string, string>;
-  body?: RequestBodyType<M, RB>;
-  cache?: RequestCacheOptions;
-  cookie?: string
+  headers?: Headers;
+  body?: RequestBodyType<M, RB> | undefined;
+  cache?: RequestCacheOptions | undefined;
+  cookie?: string | undefined;
+  credentials?: RequestCredentials;
+  destination?: RequestDestination;
+  integrity?: string;
+  mode?: RequestMode;
+  redirect?: RequestRedirect;
+  referrer?: string;
+  referrerPolicy?: ReferrerPolicy;
+  url?: string;
+  keepalive?: boolean;
+  signal?: AbortSignal;
+  clone?: () => Request;
 }
 
 export interface RestResponse<D = any> {
