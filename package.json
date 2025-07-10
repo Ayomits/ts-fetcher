@@ -1,8 +1,9 @@
 {
   "name": "ts-fetcher",
   "module": "true",
-  "version": "1.0.2",
-  "main": "dist/index.js",
+  "version": "1.0.3",
+  "types": "./dist/types",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "npx tsc --build",
     "format:fix": "prettier --fix ./src"
