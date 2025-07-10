@@ -8,7 +8,3 @@ export class LocalCacheRest extends Rest {
     });
   }
 }
-
-export function createLocalCacheRest(origin: string) {
-  return new LocalCacheRest(origin);
-}

@@ -94,6 +94,13 @@ export class Rest {
     };
   }
 
+  public async invalidate(cacheKey: string) {
+    if (!this.restOptions.cache) {
+      throw new Error("Cache is not provided!");
+    }
+    await this.restOptions.cache.del(cacheKey)
+  }
+
   public parseBody(parseAs: ParseBodyType, data: any) {
     switch (parseAs) {
       case 'JSON':

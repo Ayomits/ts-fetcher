@@ -1,44 +1,45 @@
 # ts-fetcher
 
-TypeScript module for convenient fetch API handling
+TypeScript модуль для удобной работы с fetch API
 
-## Features
+## Возможности
 
-- [x] Multiple caching strategies:
-  - In-memory caching
-  - Redis caching
-  - Custom cache implementations
-- [x] Full type safety
-- [x] Minimal boilerplate
-- [x] Class-based approach
+- [x] Поддержка различных стратегий кэширования:
+  - Локальное кэширование (in-memory)
+  - Redis кэширование
+  - Кастомные реализации кэша
+- [x] Полная типобезопасность
+- [x] Минимальный бойлерплейт
+- [x] Работа через классы
 
-## Installation
+## Установка
 
 ```bash
 npm install ts-fetcher
-# or
+# или
 yarn add ts-fetcher
-# or
+# или
 bun add ts-fetcher
-# or
+# или
 pnpm add ts-fetcher
 ```
 
-## Quick start
+## Быстрый старт
 
-1. Using pre-built classes <br>
+1. Использование готовых классов <br>
+
 ```ts
 import { Rest, LocalCacheRest, RedisCacheRest, createCache } from 'ts-fetcher';
 
-// Standard Rest with local cache
+// Стандартный Rest с локальным кэшем
 const defaultRest = new Rest('https://api.example.com', {
   cache: createCache('local')
 });
 
-// Dedicated local cache class
+// Специализированный класс для локального кэша
 const localRest = new LocalCacheRest('https://api.example.com');
 
-// Redis cache (requires ioredis)
+// Redis кэш (требуется ioredis)
 const redisRest = new RedisCacheRest('https://api.example.com', {
   host: 'localhost',
   port: 6379,
@@ -46,11 +47,12 @@ const redisRest = new RedisCacheRest('https://api.example.com', {
 });
 ```
 
-2. Using factories
+2. Использование фабрик <br>
+
 ```ts
 import { createRest, createCache } from 'ts-fetcher';
 
-// Factory for local cache
+// Создание фабрики для локального кэша
 const {
   CustomRest: LocalRest,
   createCustomRestInstance: createLocalRest
@@ -59,26 +61,28 @@ const {
 const localRest = createLocalRest('https://api.example.com');
 ```
 
-## Making requests
+## Работа с запросами
 
-1. Basic requests <br>
+1. Базовые запросы <br>
+
 ```ts
-// Without caching
+// Без кэширования
 await rest.get('/data');
 
-// With caching
+// С кэшированием
 await rest.get('/data', {
   cache: {
     cacheKey: 'data-key',
-    ttl: 5000 // 5 seconds
+    ttl: 5000 // 5 секунд
   }
 });
 
-// Cache invalidation
+// Инвалидация кэша
 await rest.invalidate('data-key');
 ```
 
-2. Typed requests <br>
+2. Типизированные запросы
+
 ```ts
 interface User {
   id: number;
@@ -89,30 +93,31 @@ interface UpdateUserDto {
   name: string;
 }
 
-// Typed GET
+// Типизированный GET
 const { data } = await rest.get<User>('/users/1');
 
-// Typed POST/PUT/PATCH
+// Типизированный POST/PUT/PATCH
 await rest.post<User, UpdateUserDto>('/users', {
   name: 'John'
 });
 ```
 
-## Custom cache
+## Кастомный кеш
+
 ```ts
 import { CacheService } from 'ts-fetcher';
 
 class CustomCache implements CacheService {
   async get<T>(key: string): Promise<T | null> {
-    // Your implementation
+    // Ваша реализация
   }
 
   async set<T>(key: string, value: T, ttl: number): Promise<void> {
-    // Your implementation
+    // Ваша реализация
   }
 
   async del(key: string): Promise<boolean> {
-    // Your implementation
+    // Ваша реализация
   }
 }
 
@@ -121,9 +126,9 @@ const customRest = new Rest('https://api.example.com', {
 });
 ```
 
-## Best practies
+## Лучшие практики
 
-Recommended to create dedicated API classes:
+Рекомендуется создавать отдельные классы для работы с API: <br>
 
 ```ts
 class UserApi {
@@ -149,11 +154,11 @@ class UserApi {
 }
 ```
 
-## Response Format
+## Формат ответов
 ```ts
 {
-  data: T,        // Response data
-  success: boolean, // Similar to response.ok
-  cached: boolean   // Whether data came from cache
+  data: T,        // Данные ответа
+  success: boolean, // Аналог response.ok
+  cached: boolean   // Флаг из кэша ли данные
 }
 ```

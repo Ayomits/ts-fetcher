@@ -48,6 +48,7 @@ export interface RequestOptions<RB = any, M extends HttpMethod = HttpMethod> {
   headers?: Record<string, string>;
   body?: RequestBodyType<M, RB>;
   cache?: RequestCacheOptions;
+  cookie?: string
 }
 
 export interface RestResponse<D = any> {

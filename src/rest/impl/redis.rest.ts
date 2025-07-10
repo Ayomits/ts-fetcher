@@ -9,7 +9,3 @@ export class RedisCacheRest extends Rest {
     });
   }
 }
-
-export function createRedisCacheRest(origin: string, options: RedisOptions) {
-  return new RedisCacheRest(origin, options);
-}
