@@ -17,6 +17,9 @@
     "lint:fix": {
       "dependsOn": ["^lint:fix"]
     },
+    "publish": {
+      "dependsOn": ["^build", "publish"]
+    },
     "dev": {
       "dependsOn": ["^dev"]
     }

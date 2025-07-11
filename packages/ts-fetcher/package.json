@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/package.json",
   "name": "ts-fetcher",
   "module": "true",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "publishConfig": {
@@ -15,7 +15,8 @@
     "lint:check": "npx eslint src --ext .ts",
     "lint:fix": "npx eslint src --ext .ts --fix",
     "build": "npx tsc --build && npx tsc-alias",
-    "pipeline": "pnpm run format:fix && pnpm run lint:fix && npm run build"
+    "pipeline": "pnpm run format:fix && pnpm run lint:fix && pnpm run build",
+    "publish": "pnpm publish --no-git-checks"
   },
   "repository": {
     "url": "https://github.com/Ayomits/ts-fetch"

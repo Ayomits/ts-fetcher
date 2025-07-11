@@ -28,7 +28,8 @@
     "format:fix": "npx turbo format:fix --concurrency=4",
     "lint:fix": "npx turbo lint:fix --concurrency=4",
     "format:check": "npx turbo format:check --concurrency=4",
-    "lint:check": "npx turbo lint:check --concurrency=4"
+    "lint:check": "npx turbo lint:check --concurrency=4",
+    "publish": "npx turbo publish --concurrency=4"
   },
   "devDependencies": {
     "@types/node": "^24.0.13",
