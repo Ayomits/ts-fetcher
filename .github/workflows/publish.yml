@@ -1,0 +1,24 @@
+name: Publish everything to npm
+
+on:
+  push:
+    branches: main
+
+jobs:
+  publish_to_npm:
+    name: Publish to Npm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+
+      - name: Install pnpm
+        run: npm instal -g pnpm
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Publish npm
+        run: pnpm run publish
