@@ -1,25 +1,48 @@
-name: Publish everything to npm
+name: Publish packages to npm
 
 on:
   push:
-    branches: main
+    branches: [main]
 
 jobs:
-  publish_to_npm:
-    name: Publish to Npm
+  init:
+    name: init environment
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install pnpm
-        run: npm instal -g pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+  build:
+    name: init environment
+    runs-on: ubuntu-latest
+    needs: [init]
+    steps:
+      - name: Build
+        run: pnpm run build
 
-      - name: Publish npm
-        run: pnpm run publish --affected --token {{ secrets.NPM_TOKEN }}
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
+      - name: Build
+        run: pnpm run build
+
+      - name: Publish changed packages
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: pnpm run publish --token $NPM_TOKEN
