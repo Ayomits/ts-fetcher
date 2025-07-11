@@ -5,7 +5,7 @@
 **/out
 **/dist
 *.tgz
-**/next
+**/.next
 
 # code coverage
 coverage
