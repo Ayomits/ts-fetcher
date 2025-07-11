@@ -1,5 +1,5 @@
-import { LiteralEnum } from '@/lib';
 import { RequestOptions, RestResponse } from '@/rest';
+import { type LiteralEnum } from '@ts-fetcher/types';
 
 export type RequestInterceptor = <Req = unknown>(
   options: RequestOptions<Req>

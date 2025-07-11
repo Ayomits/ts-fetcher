@@ -1,17 +1,13 @@
-import {
-  chainRequestInterceptors,
-  chainResponseInterceptors,
-} from '@/interceptors/chain-interceptor';
-import { DEFAULT_REST_OPTIONS } from './options';
+import { chainRequestInterceptors, chainResponseInterceptors } from '../';
 import type { ParseBodyType, RequestOptions, RestOptions, RestResponse } from './types';
 
 export class Rest {
   public origin: string;
   public restOptions: Partial<RestOptions>;
 
-  constructor(origin: string, options: Partial<RestOptions> = DEFAULT_REST_OPTIONS) {
+  constructor(origin: string, options?: Partial<RestOptions>) {
     this.origin = origin;
-    this.restOptions = options;
+    this.restOptions = options ?? {};
   }
 
   public async get<RES = unknown>(path: string, options?: Omit<Partial<RequestOptions>, 'body'>) {
@@ -75,8 +71,7 @@ export class Rest {
     }
 
     if (this.restOptions.cache && options.cache) {
-      // @ts-expect-error cache always returns generic values
-      const valueFromCache = await this.restOptions.cache.get<RestResponse<RES>>(
+      const valueFromCache = await this.restOptions.cache?.get<RestResponse<RES>>?.(
         options.cache.cacheKey
       );
       if (valueFromCache) {

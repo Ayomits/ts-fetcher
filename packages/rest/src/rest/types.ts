@@ -1,8 +1,6 @@
-import { CacheService, LocalCacheService } from '@/cache/types';
-import { RequestInterceptor, ResponseInterceptor } from '@/interceptors/types';
-import { LiteralEnum } from '@/lib/literal-enum';
-
-export type RestCache = CacheService | LocalCacheService;
+import { RequestInterceptor, ResponseInterceptor } from '../interceptors';
+import { type Cache } from '@ts-fetcher/cache';
+import { type LiteralEnum } from '@ts-fetcher/types';
 
 export interface RestInterceptorsOptions {
   request?: RequestInterceptor[];
@@ -11,7 +9,7 @@ export interface RestInterceptorsOptions {
 }
 
 export interface RestOptions {
-  cache: RestCache;
+  cache: Cache;
   interceptors?: RestInterceptorsOptions;
 }
 

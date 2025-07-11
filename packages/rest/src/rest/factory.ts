@@ -11,7 +11,7 @@ export function createRestInstance<I extends Rest = Rest>(
 ) {
   return options?.customInstance
     ? new options.customInstance(origin, options)
-    : new Rest(origin, options);
+    : new Rest(origin, options as RestOptions);
 }
 
 export function createRest(options: CreateRestInstanceOptions) {

@@ -1,4 +1,4 @@
-import { RequestOptions, RestResponse } from '@/rest';
+import { RestResponse, RequestOptions } from '@/rest';
 import { RequestInterceptor, ResponseInterceptor } from './types';
 
 export function chainRequestInterceptors<Req extends RequestOptions = RequestOptions>(

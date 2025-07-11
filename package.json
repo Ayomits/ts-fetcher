@@ -2,6 +2,7 @@
   "name": "ts-fetch",
   "version": "1.0.0",
   "description": "Typescript module for comfortable fetch",
+  "private": true,
   "keywords": [
     "fetch",
     "nodejs",
@@ -20,7 +21,18 @@
   "author": "Ayomits",
   "type": "commonjs",
   "main": "index.js",
+  "packageManager": "pnpm@10.12.1",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx turbo build --concurrency=4",
+    "format:fix": "npx turbo format:fix --concurrency=4",
+    "lint:fix": "npx turbo lint:fix --concurrency=4",
+    "format:check": "npx turbo format:check --concurrency=4",
+    "lint:check": "npx turbo lint:check --concurrency=4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.13",
+    "tsc-alias": "^1.8.16",
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.3"
   }
 }

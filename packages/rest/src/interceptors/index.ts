@@ -1,2 +1,2 @@
-export * from './chain-interceptor';
 export * from './types';
+export * from './chain-interceptor';
