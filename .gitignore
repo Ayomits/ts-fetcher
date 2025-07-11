@@ -1,10 +1,13 @@
 # dependencies (bun install)
-node_modules
+**/node_modules
 
 # output
-out
-dist
+**/.tsbuildinfo
+**/out
+**/dist
 *.tgz
+**/.next
+**/.turbo
 
 # code coverage
 coverage
