@@ -10,7 +10,7 @@
     "lint:check": "npx eslint src --ext .ts",
     "lint:fix": "npx eslint src --ext .ts --fix",
     "build": "npx tsc --build",
-    "pipeline": "bun run format:fix && bun run lint:fix && bun run build"
+    "pipeline": "npm run format:fix && bun run lint:fix && npm run build"
   },
   "repository": {
     "url": "https://github.com/Ayomits/ts-fetch"
