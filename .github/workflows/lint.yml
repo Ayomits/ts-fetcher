@@ -22,10 +22,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Check prettier
-        run: pnpm run format:check
+        run: pnpm run format:check --affected
 
       - name: Check lint
-        run: pnpm run lint:check
+        run: pnpm run lint:check --affected
 
       - name: Build
-        run: pnpm run build
+        run: pnpm run build --affected
