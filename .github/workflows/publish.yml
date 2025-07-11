@@ -1,61 +1,30 @@
-name: Publish packages to npm
+name: Lint and Build
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  setup:
-    name: Setup environment
+  lint-and-build:
+    name: Lint and Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
 
       - name: Install pnpm
-        run: npm install -g pnpm
+        run: npm instal -g pnpm
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: pnpm install --frozen-lockfile
-
-  build:
-    name: Build packages
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Restore Node.js
-        uses: actions/setup-node@v3
-
-      - name: Restore pnpm
-        uses: setup
 
       - name: Build
         run: pnpm run build
 
-  publish:
-    name: Publish to npm
-    needs: [setup, build]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup publishing environment
-        uses: actions/setup-node@v3
-
-      - name: Restore pnpm
-        uses: setup
-
-      - name: Publish changed packages
+      - name: Publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: pnpm run publish --token $NPM_TOKEN
