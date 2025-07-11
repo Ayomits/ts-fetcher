@@ -21,4 +21,5 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Publish npm
-        run: pnpm run publish --affected
+        run: pnpm run publish --affected --token {{ secrets.NPM_TOKEN }}
+
