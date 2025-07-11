@@ -18,7 +18,8 @@
       "dependsOn": ["^lint:fix"]
     },
     "publish": {
-      "dependsOn": ["^build", "^publish"]
+      "dependsOn": ["^build", "^publish"],
+      "env": ["NPM_TOKEN"]
     },
     "dev": {
       "dependsOn": ["^dev"]
