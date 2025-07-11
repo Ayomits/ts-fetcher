@@ -17,9 +17,8 @@
     "lint:fix": {
       "dependsOn": ["^lint:fix"]
     },
-    "publish": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+    "dev": {
+      "dependsOn": ["^dev"]
     }
   }
 }
