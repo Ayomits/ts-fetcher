@@ -7,6 +7,7 @@ export type RestCache = CacheService | LocalCacheService;
 export interface RestInterceptorsOptions {
   request?: RequestInterceptor[];
   response?: ResponseInterceptor[];
+  executeOnCached?: boolean;
 }
 
 export interface RestOptions {
@@ -48,7 +49,7 @@ export interface RequestCacheOptions {
   ttl?: number;
 }
 
-export interface RequestOptions<RB = any, M extends HttpMethod = HttpMethod> {
+export interface FetchOptions<RB = any, M extends HttpMethod = HttpMethod> {
   path: string;
   origin?: string | undefined;
   method: M;
@@ -67,6 +68,11 @@ export interface RequestOptions<RB = any, M extends HttpMethod = HttpMethod> {
   keepalive?: boolean;
   signal?: AbortSignal;
   clone?: () => Request;
+}
+
+export interface RequestOptions<RB = any, M extends HttpMethod = HttpMethod>
+  extends FetchOptions<RB, M> {
+  interceptors?: RestInterceptorsOptions;
 }
 
 export interface RestResponse<D = any> {

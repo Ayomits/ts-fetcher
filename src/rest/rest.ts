@@ -57,18 +57,22 @@ export class Rest {
   public async request<RES = any, REQ = any>(
     options: RequestOptions<REQ>
   ): Promise<RestResponse<RES>> {
+    const interceptors = this.mergeInterceptors(options);
+    if (interceptors.request?.length) {
+      options = chainRequestInterceptors(options, interceptors.request);
+    }
+
     if (this.restOptions.cache && options.cache) {
       // @ts-expect-error cache always returns generic values
       const valueFromCache = await this.restOptions.cache.get<RestResponse<RES>>(
         options.cache.cacheKey
       );
       if (valueFromCache) {
-        return valueFromCache;
+        return this.restOptions.interceptors?.executeOnCached ||
+          options.interceptors?.executeOnCached
+          ? this.responseWithInterceptors(valueFromCache, interceptors)
+          : valueFromCache;
       }
-    }
-
-    if (this.restOptions.interceptors?.request?.length) {
-      options = chainRequestInterceptors(options, this.restOptions.interceptors.request);
     }
 
     const body =
@@ -97,15 +101,32 @@ export class Rest {
       );
     }
 
-    const data: RestResponse<RES> = {
-      ...formated,
-      cached: false,
-    };
+    return this.responseWithInterceptors(
+      {
+        ...formated,
+        cached: false,
+      },
+      interceptors
+    );
+  }
 
-    if (this.restOptions.interceptors?.response?.length) {
-      return chainResponseInterceptors(data, this.restOptions.interceptors.response);
-    }
-    return data;
+  public responseWithInterceptors<RES = unknown>(
+    data: RestResponse<RES>,
+    interceptors: ReturnType<typeof this.mergeInterceptors>
+  ) {
+    return interceptors.response.length
+      ? chainResponseInterceptors(data, interceptors.response)
+      : data;
+  }
+
+  public mergeInterceptors<REQ = unknown>(options: RequestOptions<REQ>) {
+    const resInterceptors = this.restOptions.interceptors?.response ?? [];
+    const reqInterceptors = this.restOptions.interceptors?.request ?? [];
+
+    return {
+      request: [...reqInterceptors, ...(options.interceptors?.request ?? [])],
+      response: [...resInterceptors, ...(options.interceptors?.response ?? [])],
+    };
   }
 
   public async invalidate(cacheKey: string) {
