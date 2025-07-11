@@ -34,6 +34,9 @@ jobs:
       - name: Restore Node.js
         uses: actions/setup-node@v3
 
+      - name: Restore pnpm
+        uses: setup
+
       - name: Build
         run: pnpm run build
 
@@ -48,6 +51,9 @@ jobs:
 
       - name: Setup publishing environment
         uses: actions/setup-node@v3
+
+      - name: Restore pnpm
+        uses: setup
 
       - name: Publish changed packages
         env:
