@@ -70,6 +70,10 @@ export class Rest {
       options = chainRequestInterceptors(options, interceptors.request);
     }
 
+    if (!this.restOptions.cache && options.cache) {
+      throw new Error('Rest cache options is not provided!');
+    }
+
     if (this.restOptions.cache && options.cache) {
       const valueFromCache = await this.restOptions.cache?.get<RestResponse<RES>>?.(
         options.cache.cacheKey

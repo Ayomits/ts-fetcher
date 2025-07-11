@@ -1,7 +1,6 @@
 # ts-fetcher
 
-TypeScript module for convenient fetch API handling <br>
-RU version -> [link](https://github.com/Ayomits/ts-fetch/blob/master/README.ru.md)
+TypeScript module for caching with 2 strategies <br>
 
 ## Features
 
@@ -9,98 +8,109 @@ RU version -> [link](https://github.com/Ayomits/ts-fetch/blob/master/README.ru.m
   - In-memory caching
   - Redis caching
   - Custom cache implementations
-- [x] Full type safety
-- [x] Minimal boilerplate
-- [x] Class-based approach
 
 ## Installation
 
 ```bash
-npm install ts-fetcher
+npm install @ts-fetcher/cache
 # or
-yarn add ts-fetcher
+yarn add @ts-fetcher/cache
 # or
-bun add ts-fetcher
+bun add @ts-fetcher/cache
 # or
-pnpm add ts-fetcher
+pnpm add @ts-fetcher/cache
 ```
 
-## Quick start
+## Strategies
 
-1. Using pre-built classes <br>
+There are two ways how to use cache
+
+1. Local cache (in-memory)
 
 ```ts
-import { Rest, LocalCacheRest, RedisCacheRest, createCache } from 'ts-fetcher';
+import { createCache, LocalCache } from '@ts-fetcher/cache';
 
-// Standard Rest with local cache
-const defaultRest = new Rest('https://api.example.com', {
-  cache: createCache('local'),
-});
+const factoryWay = createCache('local');
 
-// Dedicated local cache class
-const localRest = new LocalCacheRest('https://api.example.com');
+const instanceWay = new LocalCache();
+```
 
-// Redis cache (requires ioredis)
-const redisRest = new RedisCacheRest('https://api.example.com', {
+2. Redis cache (ioredis backend)
+
+Install ioredis
+
+```bash
+npm install ioredis
+# or
+yarn add ioredis
+# or
+bun add ioredis
+# or
+pnpm add ioredis
+```
+
+```ts
+import { createCache, RedisCache } from '@ts-fetcher/cache';
+
+const factoryWay = createCache('local', {
   host: 'localhost',
-  port: 6379,
   password: 'redis',
+  port: 6379,
+});
+
+const instanceWay = new RedisCache({
+  host: 'localhost',
+  password: 'redis',
+  port: 6379,
 });
 ```
 
-2. Using factories
+## Cache usage
+
+For this examples not important what kind of strategy have you choosen
+
+1. Get
 
 ```ts
-import { createRest, createCache } from 'ts-fetcher';
+import { createCache } from '@ts-fetcher/cache';
 
-// Factory for local cache
-const { CustomRest: LocalRest, createCustomRestInstance: createLocalRest } = createRest({
-  cache: createCache('local'),
-});
+const factoryWay = createCache('local');
 
-const localRest = createLocalRest('https://api.example.com');
+// no type assertion
+await factoryWay.get("key-primitive")
+
+// with type assertion
+await factoryWay.get<object>("key-assertion")
+
 ```
 
-## Making requests
+2. Set
+```ts
+import { createCache } from '@ts-fetcher/cache';
 
-1. Basic requests <br>
+const factoryWay = createCache('local');
+
+// no type assertion
+await factoryWay.set("key-primitive", 10)
+
+// this value will be removed after 500 miliseconds
+await factoryWay.set<object>("key-assertion", { hello: "world" }, 500)
+
+// this value will be cached forever
+await factoryWay.set<object>("key-assertion", { hello: "world" })
+```
+
+3. Del
 
 ```ts
-// Without caching
-await rest.get('/data');
+import { createCache } from '@ts-fetcher/cache';
 
-// With caching
-await rest.get('/data', {
-  cache: {
-    cacheKey: 'data-key',
-    ttl: 5000, // 5 seconds
-  },
-});
+const factoryWay = createCache('local');
 
-// Cache invalidation
-await rest.invalidate('data-key');
+// it will delete value by key
+await factoryWay.del("key-primitive")
 ```
 
-2. Typed requests <br>
-
-```ts
-interface User {
-  id: number;
-  name: string;
-}
-
-interface UpdateUserDto {
-  name: string;
-}
-
-// Typed GET
-const { data } = await rest.get<User>('/users/1');
-
-// Typed POST/PUT/PATCH
-await rest.post<User, UpdateUserDto>('/users', {
-  name: 'John',
-});
-```
 
 ## Custom cache
 
@@ -119,120 +129,5 @@ class CustomCache implements CacheService {
   async del(key: string): Promise<boolean> {
     // Your implementation
   }
-}
-
-const customRest = new Rest('https://api.example.com', {
-  cache: new CustomCache(),
-});
-```
-
-## Interceptors
-
-You may familar with interceptors concepts in axios. They allows to mutate response/request during request lifecycle <br>
-
-Usage:
-
-```ts
-import { createCache, createRest, RequestInterceptor, ResponseInterceptor } from 'ts-fetcher';
-
-const ReqInterceptor: RequestInterceptor = (options) => {
-  return {
-    ...options,
-    cache: {
-      cacheKey: `example_${Date.now()}`,
-      ttl: 20_000,
-    },
-  };
-};
-
-const NextReqInterceptor: RequestInterceptor = (options) => {
-  return {
-    ...options
-    next: true
-  };
-};
-
-const ResInterceptor: ResponseInterceptor = (data) => {
-  return {
-    ...data,
-    overrided: true
-  }
-};
-
-const const NextResInterceptor: ResponseInterceptor = (data) => {
-  return {
-    ...data,
-    next: true
-  }
-};
-
-const {
-  CustomRest: ExampleRest,
-  createCustomRestInstance: createExampleRestInstance,
-} = createRest({
-  cache: createCache('local'),
-  // This interceptors are global, they will work for all request with this rest
-  interceptors: {
-    request: [ReqInterceptor],
-    response: [ResInterceptor]
-  },
-});
-
-const exampleRest = createOtakuReactionRestInstance('https://api.example.com');
-
-await exampleRest.get("/path", {
-  interceptors: {
-    // This interceptors are local, they will work for only for this request
-    request: [NextReqInterceptor],
-    response: [NextResInterceptor]
-  }
-})
-
-await exampleRest.get("/path", {
-  interceptors: {
-    // This interceptors are local, they will work for only for this request
-    request: [NextReqInterceptor],
-    response: [NextResInterceptor],
-    // By default interceptors works only with new requests, if you want you can provide this option
-    executeOnCached: true
-  }
-})
-```
-
-## Best practies
-
-Recommended to create dedicated API classes:
-
-```ts
-class UserApi {
-  private rest: LocalCacheRest;
-
-  constructor() {
-    this.rest = new LocalCacheRest('https://api.example.com');
-  }
-
-  async getUser(id: number) {
-    return this.rest.get<User>(`/users/${id}`, {
-      cache: {
-        cacheKey: `user-${id}`,
-        ttl: 60_000,
-      },
-    });
-  }
-
-  async updateUser(id: number, data: UpdateUserDto) {
-    await this.rest.invalidate(`user-${id}`);
-    return this.rest.patch<User, UpdateUserDto>(`/users/${id}`, data);
-  }
-}
-```
-
-## Response Format
-
-```ts
-{
-  data: T,        // Response data
-  success: boolean, // Similar to response.ok
-  cached: boolean   // Whether data came from cache
 }
 ```
