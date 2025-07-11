@@ -19,7 +19,6 @@
     },
     "publish": {
       "dependsOn": ["^build", "^publish"],
-      
     },
     "dev": {
       "dependsOn": ["^dev"]
