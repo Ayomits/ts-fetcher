@@ -21,4 +21,4 @@ jobs:
         run: pnpm install
 
       - name: Publish npm
-        run: pnpm run publish
+        run: pnpm run publish --affected
