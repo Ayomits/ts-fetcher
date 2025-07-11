@@ -126,6 +126,79 @@ const customRest = new Rest('https://api.example.com', {
 });
 ```
 
+## Interceptors
+
+Вы могли быть знакомы с концепцией interceptors в axios. Они позволяет мутировать ответы/опции запросов <br>
+
+Использование:
+
+```ts
+import { createCache, createRest, RequestInterceptor, ResponseInterceptor } from 'ts-fetcher';
+
+const ReqInterceptor: RequestInterceptor = (options) => {
+  return {
+    ...options,
+    cache: {
+      cacheKey: `example_${Date.now()}`,
+      ttl: 20_000,
+    },
+  };
+};
+
+const NextReqInterceptor: RequestInterceptor = (options) => {
+  return {
+    ...options
+    next: true
+  };
+};
+
+const ResInterceptor: ResponseInterceptor = (data) => {
+  return {
+    ...data,
+    overrided: true
+  }
+};
+
+const const NextResInterceptor: ResponseInterceptor = (data) => {
+  return {
+    ...data,
+    next: true
+  }
+};
+
+const {
+  CustomRest: ExampleRest,
+  createCustomRestInstance: createExampleRestInstance,
+} = createRest({
+  cache: createCache('local'),
+  // Эти interceptors работают на глобальном уровне, т.е. для каждого запроса по origin
+  interceptors: {
+    request: [ReqInterceptor],
+    response: [ResInterceptor]
+  },
+});
+
+const exampleRest = createOtakuReactionRestInstance('https://api.example.com');
+
+await exampleRest.get("/path", {
+  interceptors: {
+    // Эти interceptors локальны, они сработают лишь на этом запросе
+    request: [NextReqInterceptor],
+    response: [NextResInterceptor]
+  }
+})
+
+await exampleRest.get("/path", {
+  interceptors: {
+    // Эти interceptors локальны, они сработают лишь на этом запросе
+    request: [NextReqInterceptor],
+    response: [NextResInterceptor],
+    // По умолчанию interceptors работают только для новых запросов, чтобы это изменить используйте эту опцию
+    executeOnCached: true
+  }
+})
+```
+
 ## Лучшие практики
 
 Рекомендуется создавать отдельные классы для работы с API: <br>

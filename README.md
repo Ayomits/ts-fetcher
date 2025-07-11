@@ -28,12 +28,13 @@ pnpm add ts-fetcher
 ## Quick start
 
 1. Using pre-built classes <br>
+
 ```ts
 import { Rest, LocalCacheRest, RedisCacheRest, createCache } from 'ts-fetcher';
 
 // Standard Rest with local cache
 const defaultRest = new Rest('https://api.example.com', {
-  cache: createCache('local')
+  cache: createCache('local'),
 });
 
 // Dedicated local cache class
@@ -43,19 +44,19 @@ const localRest = new LocalCacheRest('https://api.example.com');
 const redisRest = new RedisCacheRest('https://api.example.com', {
   host: 'localhost',
   port: 6379,
-  password: 'redis'
+  password: 'redis',
 });
 ```
 
 2. Using factories
+
 ```ts
 import { createRest, createCache } from 'ts-fetcher';
 
 // Factory for local cache
-const {
-  CustomRest: LocalRest,
-  createCustomRestInstance: createLocalRest
-} = createRest({ cache: createCache('local') });
+const { CustomRest: LocalRest, createCustomRestInstance: createLocalRest } = createRest({
+  cache: createCache('local'),
+});
 
 const localRest = createLocalRest('https://api.example.com');
 ```
@@ -63,6 +64,7 @@ const localRest = createLocalRest('https://api.example.com');
 ## Making requests
 
 1. Basic requests <br>
+
 ```ts
 // Without caching
 await rest.get('/data');
@@ -71,8 +73,8 @@ await rest.get('/data');
 await rest.get('/data', {
   cache: {
     cacheKey: 'data-key',
-    ttl: 5000 // 5 seconds
-  }
+    ttl: 5000, // 5 seconds
+  },
 });
 
 // Cache invalidation
@@ -80,6 +82,7 @@ await rest.invalidate('data-key');
 ```
 
 2. Typed requests <br>
+
 ```ts
 interface User {
   id: number;
@@ -95,11 +98,12 @@ const { data } = await rest.get<User>('/users/1');
 
 // Typed POST/PUT/PATCH
 await rest.post<User, UpdateUserDto>('/users', {
-  name: 'John'
+  name: 'John',
 });
 ```
 
 ## Custom cache
+
 ```ts
 import { CacheService } from 'ts-fetcher';
 
@@ -118,8 +122,81 @@ class CustomCache implements CacheService {
 }
 
 const customRest = new Rest('https://api.example.com', {
-  cache: new CustomCache()
+  cache: new CustomCache(),
 });
+```
+
+## Interceptors
+
+You may familar with interceptors concepts in axios. They allows to mutate response/request during request lifecycle <br>
+
+Usage:
+
+```ts
+import { createCache, createRest, RequestInterceptor, ResponseInterceptor } from 'ts-fetcher';
+
+const ReqInterceptor: RequestInterceptor = (options) => {
+  return {
+    ...options,
+    cache: {
+      cacheKey: `example_${Date.now()}`,
+      ttl: 20_000,
+    },
+  };
+};
+
+const NextReqInterceptor: RequestInterceptor = (options) => {
+  return {
+    ...options
+    next: true
+  };
+};
+
+const ResInterceptor: ResponseInterceptor = (data) => {
+  return {
+    ...data,
+    overrided: true
+  }
+};
+
+const const NextResInterceptor: ResponseInterceptor = (data) => {
+  return {
+    ...data,
+    next: true
+  }
+};
+
+const {
+  CustomRest: ExampleRest,
+  createCustomRestInstance: createExampleRestInstance,
+} = createRest({
+  cache: createCache('local'),
+  // This interceptors are global, they will work for all request with this rest
+  interceptors: {
+    request: [ReqInterceptor],
+    response: [ResInterceptor]
+  },
+});
+
+const exampleRest = createOtakuReactionRestInstance('https://api.example.com');
+
+await exampleRest.get("/path", {
+  interceptors: {
+    // This interceptors are local, they will work for only for this request
+    request: [NextReqInterceptor],
+    response: [NextResInterceptor]
+  }
+})
+
+await exampleRest.get("/path", {
+  interceptors: {
+    // This interceptors are local, they will work for only for this request
+    request: [NextReqInterceptor],
+    response: [NextResInterceptor],
+    // By default interceptors works only with new requests, if you want you can provide this option
+    executeOnCached: true
+  }
+})
 ```
 
 ## Best practies
@@ -138,8 +215,8 @@ class UserApi {
     return this.rest.get<User>(`/users/${id}`, {
       cache: {
         cacheKey: `user-${id}`,
-        ttl: 60_000
-      }
+        ttl: 60_000,
+      },
     });
   }
 
@@ -151,6 +228,7 @@ class UserApi {
 ```
 
 ## Response Format
+
 ```ts
 {
   data: T,        // Response data
