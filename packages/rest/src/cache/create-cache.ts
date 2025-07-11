@@ -1,8 +1,7 @@
-import { LiteralEnum } from '@/lib/literal-enum';
-import { LocalCache } from './strategies/local/local.cache.service';
+import { LiteralEnum } from '@/lib';
+import { RestCache } from '@/rest';
 import { RedisOptions } from 'ioredis';
-import { RedisCache } from './strategies/redis/redis.cache.service';
-import { RestCache } from '@/rest/types';
+import { RedisCache, LocalCache } from './strategies';
 
 export const CacheStrategies = {
   Local: 'local',

@@ -1,10 +1,11 @@
 # dependencies (bun install)
-node_modules
+**/node_modules
 
 # output
-out
-dist
+**/out
+**/dist
 *.tgz
+**/next
 
 # code coverage
 coverage
