@@ -4,8 +4,6 @@ on:
   push:
     branches-ignore:
       - main
-  pull_request:
-  fork:
 
 jobs:
   lint-and-build:
@@ -16,9 +14,6 @@ jobs:
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: 'npm'
 
       - name: Install pnpm
         run: npm instal -g pnpm
