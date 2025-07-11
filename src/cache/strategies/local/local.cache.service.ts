@@ -23,7 +23,7 @@ export class LocalCache implements LocalCacheService {
     return (options?.raw ? value : value.data) as GetCacheValueReturn<R, T>;
   }
 
-  set<T = any>(key: string, value: T, ttl: number): void {
+  set<T = unknown>(key: string, value: T, ttl: number): void {
     const now = Date.now();
     const expiresAt = Number.isFinite(ttl) && ttl !== Infinity ? now + ttl : null;
 

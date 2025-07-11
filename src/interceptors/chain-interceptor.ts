@@ -11,7 +11,7 @@ export function chainRequestInterceptors<Req extends RequestOptions = RequestOpt
     return defaultOptions;
   }
 
-  const options = current(defaultOptions as any);
+  const options = current(defaultOptions as never);
   return chainRequestInterceptors(options, interceptors, __idx + 1);
 }
 
@@ -25,6 +25,6 @@ export function chainResponseInterceptors<Res extends RestResponse = RestRespons
     return data;
   }
 
-  const options = current(data as any);
+  const options = current(data as never);
   return chainResponseInterceptors(options, interceptors, __idx + 1);
 }

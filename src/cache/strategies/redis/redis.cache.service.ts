@@ -56,8 +56,7 @@ export class RedisCache implements CacheService {
         return redisValue as T;
       }
     } catch (err) {
-      console.error('Redis get error:', err);
-      return null;
+      throw new Error(`Redis error \n ${err}`);
     }
   }
 
@@ -72,7 +71,7 @@ export class RedisCache implements CacheService {
         await this.client.set(key, valueToSet);
       }
     } catch (err) {
-      console.error('Redis set error:', err);
+      throw new Error(`Redis set error\n${err}`);
     }
   }
 
@@ -82,8 +81,7 @@ export class RedisCache implements CacheService {
       const result = await this.client.del(key);
       return result > 0;
     } catch (err) {
-      console.error('Redis del error:', err);
-      return false;
+      throw new Error(`Redis delete error\n${err}`);
     }
   }
 }

@@ -14,7 +14,7 @@ export class Rest {
     this.restOptions = options;
   }
 
-  public async get<RES = any>(path: string, options?: Omit<Partial<RequestOptions>, 'body'>) {
+  public async get<RES = unknown>(path: string, options?: Omit<Partial<RequestOptions>, 'body'>) {
     return await this.request<RES>({
       path,
       method: 'GET',
@@ -22,7 +22,10 @@ export class Rest {
     });
   }
 
-  public async post<RES = any, REQ = any>(path: string, options?: Partial<RequestOptions<REQ>>) {
+  public async post<RES = unknown, REQ = unknown>(
+    path: string,
+    options?: Partial<RequestOptions<REQ>>
+  ) {
     return await this.request<RES>({
       path,
       method: 'POST',
@@ -30,7 +33,10 @@ export class Rest {
     });
   }
 
-  public async put<RES = any, REQ = any>(path: string, options?: Partial<RequestOptions<REQ>>) {
+  public async put<RES = unknown, REQ = unknown>(
+    path: string,
+    options?: Partial<RequestOptions<REQ>>
+  ) {
     return await this.request<RES>({
       path,
       method: 'PUT',
@@ -38,7 +44,10 @@ export class Rest {
     });
   }
 
-  public async patch<RES = any, REQ = any>(path: string, options?: Partial<RequestOptions<REQ>>) {
+  public async patch<RES = unknown, REQ = unknown>(
+    path: string,
+    options?: Partial<RequestOptions<REQ>>
+  ) {
     return await this.request<RES>({
       path,
       method: 'DELETE',
@@ -46,7 +55,10 @@ export class Rest {
     });
   }
 
-  public async delete<RES = any, REQ = any>(path: string, options?: Partial<RequestOptions<REQ>>) {
+  public async delete<RES = unknown, REQ = unknown>(
+    path: string,
+    options?: Partial<RequestOptions<REQ>>
+  ) {
     return await this.request<RES>({
       path,
       method: 'DELETE',
@@ -54,7 +66,7 @@ export class Rest {
     });
   }
 
-  public async request<RES = any, REQ = any>(
+  public async request<RES = unknown, REQ = unknown>(
     options: RequestOptions<REQ>
   ): Promise<RestResponse<RES>> {
     const interceptors = this.mergeInterceptors(options);
@@ -136,6 +148,7 @@ export class Rest {
     await this.restOptions.cache.del(cacheKey);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public parseBody(parseAs: ParseBodyType, data: any) {
     switch (parseAs) {
       case 'JSON':
@@ -145,7 +158,7 @@ export class Rest {
     }
   }
 
-  public async parseJsonResponse<RES = any>(res: Response) {
+  public async parseJsonResponse<RES = unknown>(res: Response) {
     try {
       return (await res.json()) as RES;
     } catch {

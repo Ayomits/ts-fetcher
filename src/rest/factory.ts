@@ -26,6 +26,5 @@ export function createRest(options: CreateRestInstanceOptions) {
     });
   }
 
-
   return { CustomRest, createCustomRestInstance };
 }

@@ -34,14 +34,14 @@ export const ParseBodyType = {
 
 export type ParseBodyType = LiteralEnum<typeof ParseBodyType>;
 
-export interface RequestBody<T = any> {
+export interface RequestBody<T = unknown> {
   data: T;
   parseAs: ParseBodyType;
 }
 
 export type RequestBodyType<
   M extends HttpMethod = HttpMethod,
-  RB = any,
+  RB = unknown,
 > = M extends typeof HttpMethod.Get ? null : RequestBody<RB>;
 
 export interface RequestCacheOptions {
@@ -49,7 +49,7 @@ export interface RequestCacheOptions {
   ttl?: number;
 }
 
-export interface FetchOptions<RB = any, M extends HttpMethod = HttpMethod> {
+export interface FetchOptions<RB = unknown, M extends HttpMethod = HttpMethod> {
   path: string;
   origin?: string | undefined;
   method: M;
@@ -70,12 +70,12 @@ export interface FetchOptions<RB = any, M extends HttpMethod = HttpMethod> {
   clone?: () => Request;
 }
 
-export interface RequestOptions<RB = any, M extends HttpMethod = HttpMethod>
+export interface RequestOptions<RB = unknown, M extends HttpMethod = HttpMethod>
   extends FetchOptions<RB, M> {
   interceptors?: RestInterceptorsOptions;
 }
 
-export interface RestResponse<D = any> {
+export interface RestResponse<D = unknown> {
   success: boolean;
   data: D;
   cached: boolean;
