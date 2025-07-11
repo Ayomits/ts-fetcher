@@ -19,10 +19,6 @@
     },
     "dev": {
       "dependsOn": ["^dev"]
-    },
-    "publish": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     }
   }
 }
