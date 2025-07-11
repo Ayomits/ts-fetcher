@@ -5,42 +5,60 @@ on:
     branches: [main]
 
 jobs:
-  init:
-    name: init environment
+  setup:
+    name: Setup environment
     runs-on: ubuntu-latest
-    steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 10
-
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-  build:
-    name: init environment
-    runs-on: ubuntu-latest
-    needs: [init]
-    steps:
-      - name: Build
-        run: pnpm run build
-
-  publish:
-    name: Publish to npm
-    runs-on: ubuntu-latest
-    needs: [build]
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - name: Setup Node.js
+        id: set-node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: '8'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+  build:
+    name: Build packages
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore Node.js
+        uses: actions/setup-node@v3
+        with:
+          registry-url: 'https://registry.npmjs.org'
+
       - name: Build
         run: pnpm run build
+
+  publish:
+    name: Publish to npm
+    needs: [setup, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup publishing environment
+        uses: actions/setup-node@v3
+        with:
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Publish changed packages
         env:
