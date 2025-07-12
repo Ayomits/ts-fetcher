@@ -1,5 +1,11 @@
 # @ts-fetcher/cache
 
+## 1.1.3
+
+### Patch Changes
+
+- Metadata update
+
 ## 1.1.2
 
 ### Patch Changes

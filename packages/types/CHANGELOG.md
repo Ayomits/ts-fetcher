@@ -1,5 +1,11 @@
 # @ts-fetcher/types
 
+## 1.2.1
+
+### Patch Changes
+
+- Metadata update
+
 ## 1.2.0
 
 ### Minor Changes

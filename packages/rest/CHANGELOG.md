@@ -1,5 +1,11 @@
 # @ts-fetcher/rest
 
+## 1.1.5
+
+### Patch Changes
+
+- Metadata update
+
 ## 1.1.4
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # ts-fetcher
 
+## 1.2.3
+
+### Patch Changes
+
+- Metadata update
+
 ## 1.2.2
 
 ### Patch Changes
