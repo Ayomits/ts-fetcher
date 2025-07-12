@@ -1,5 +1,11 @@
 # @ts-fetcher/types
 
+## 1.2.0
+
+### Minor Changes
+
+- I forget about bug... and version need to be minor bumped
+
 ## 1.1.3
 
 ### Patch Changes
