@@ -1,8 +1,12 @@
-import { LocalCacheService } from '../types';
-import { GetCacheValueOptions, GetCacheValueReturn, LocalCacheValues } from './local-cache.types';
+import {
+  BaseCacheService,
+  CachedValue,
+  CacheRetrievalOptions,
+  CacheRetrievalResult,
+} from '@ts-fetcher/types';
 
-export class LocalCache implements LocalCacheService {
-  private cache: Map<string, LocalCacheValues>;
+export class LocalCache implements BaseCacheService {
+  private cache: Map<string, CachedValue>;
 
   constructor() {
     this.cache = new Map();
@@ -10,17 +14,17 @@ export class LocalCache implements LocalCacheService {
 
   get<T = unknown, R extends boolean = false>(
     key: string,
-    options?: GetCacheValueOptions<R>
-  ): GetCacheValueReturn<R, T> | null {
+    options?: CacheRetrievalOptions<R>
+  ): CacheRetrievalResult<R, T> | null {
     const value = this.cache.get(key);
     if (!value) return null;
 
     if (value.expiresAt && value.expiresAt < Date.now()) {
-      this.del(key);
+      this.delete(key);
       return null;
     }
 
-    return (options?.raw ? value : value.data) as GetCacheValueReturn<R, T>;
+    return (options?.includeMetadata ? value : value.data) as CacheRetrievalResult<R, T>;
   }
 
   set<T = unknown>(key: string, value: T, ttl: number): void {
@@ -28,24 +32,24 @@ export class LocalCache implements LocalCacheService {
     const expiresAt = Number.isFinite(ttl) && ttl !== Infinity ? now + ttl : null;
 
     const existing = this.cache.get(key);
-    if (existing?.timeout) {
-      clearTimeout(existing.timeout);
+    if (existing?.evictionTimeout) {
+      clearTimeout(existing.evictionTimeout);
     }
 
     this.cache.set(key, {
       createdAt: now,
       data: value,
-      timeout: expiresAt ? setTimeout(() => this.del(key), ttl) : null,
+      evictionTimeout: expiresAt ? setTimeout(() => this.delete(key), ttl) : null,
       expiresAt,
     });
   }
 
-  del(key: string): boolean {
+  delete(key: string): boolean {
     const value = this.cache.get(key);
     if (!value) return false;
 
-    if (value.timeout) {
-      clearTimeout(value.timeout);
+    if (value.evictionTimeout) {
+      clearTimeout(value.evictionTimeout);
     }
 
     return this.cache.delete(key);

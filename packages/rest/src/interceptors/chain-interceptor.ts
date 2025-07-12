@@ -1,11 +1,13 @@
-import { RestResponse, RequestOptions } from '@/rest';
-import { RequestInterceptor, ResponseInterceptor } from './types';
+import {
+  ApiResponse,
+  EnhancedRequestOptions,
+  RequestInterceptor,
+  ResponseInterceptor,
+} from '@ts-fetcher/types';
 
-export function chainRequestInterceptors<Req extends RequestOptions = RequestOptions>(
-  defaultOptions: Req,
-  interceptors: RequestInterceptor[],
-  __idx = 0
-) {
+export function chainRequestInterceptors<
+  Req extends EnhancedRequestOptions = EnhancedRequestOptions,
+>(defaultOptions: Req, interceptors: RequestInterceptor[], __idx = 0) {
   const current = interceptors[__idx];
   if (!current) {
     return defaultOptions;
@@ -15,7 +17,7 @@ export function chainRequestInterceptors<Req extends RequestOptions = RequestOpt
   return chainRequestInterceptors(options, interceptors, __idx + 1);
 }
 
-export function chainResponseInterceptors<Res extends RestResponse = RestResponse>(
+export function chainResponseInterceptors<Res extends ApiResponse = ApiResponse>(
   data: Res,
   interceptors: ResponseInterceptor[],
   __idx = 0

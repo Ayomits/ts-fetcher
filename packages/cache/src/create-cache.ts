@@ -1,7 +1,6 @@
 import { RedisOptions } from 'ioredis';
 import { RedisCache, LocalCache } from './strategies';
-import { LiteralEnum } from '@ts-fetcher/types';
-import { Cache } from './strategies/types';
+import { type LiteralEnum, type CacheServiceImplementation } from '@ts-fetcher/types';
 
 export const CacheStrategies = {
   Local: 'local',
@@ -17,7 +16,7 @@ export type CacheOptions<T extends CacheStrategies> = T extends typeof CacheStra
 export function createCache<T extends CacheStrategies = CacheStrategies>(
   type: T,
   options?: CacheOptions<T>
-): Cache {
+): CacheServiceImplementation {
   switch (type) {
     case 'redis':
       return new RedisCache(options!);

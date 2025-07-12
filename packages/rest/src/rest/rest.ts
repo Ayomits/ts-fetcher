@@ -1,16 +1,24 @@
+import {
+  ApiResponse,
+  BodyParserType,
+  EnhancedRequestOptions,
+  RestClientConfiguration,
+} from '@ts-fetcher/types';
 import { chainRequestInterceptors, chainResponseInterceptors } from '../';
-import type { ParseBodyType, RequestOptions, RestOptions, RestResponse } from './types';
 
 export class Rest {
   public origin: string;
-  public restOptions: Partial<RestOptions>;
+  public restOptions: Partial<RestClientConfiguration>;
 
-  constructor(origin: string, options?: Partial<RestOptions>) {
+  constructor(origin: string, options?: Partial<RestClientConfiguration>) {
     this.origin = origin;
     this.restOptions = options ?? {};
   }
 
-  public async get<RES = unknown>(path: string, options?: Omit<Partial<RequestOptions>, 'body'>) {
+  public async get<RES = unknown>(
+    path: string,
+    options?: Omit<Partial<EnhancedRequestOptions>, 'body'>
+  ) {
     return await this.request<RES>({
       path,
       method: 'GET',
@@ -20,7 +28,7 @@ export class Rest {
 
   public async post<RES = unknown, REQ = unknown>(
     path: string,
-    options?: Partial<RequestOptions<REQ>>
+    options?: Partial<EnhancedRequestOptions<REQ>>
   ) {
     return await this.request<RES>({
       path,
@@ -31,7 +39,7 @@ export class Rest {
 
   public async put<RES = unknown, REQ = unknown>(
     path: string,
-    options?: Partial<RequestOptions<REQ>>
+    options?: Partial<EnhancedRequestOptions<REQ>>
   ) {
     return await this.request<RES>({
       path,
@@ -42,7 +50,7 @@ export class Rest {
 
   public async patch<RES = unknown, REQ = unknown>(
     path: string,
-    options?: Partial<RequestOptions<REQ>>
+    options?: Partial<EnhancedRequestOptions<REQ>>
   ) {
     return await this.request<RES>({
       path,
@@ -53,7 +61,7 @@ export class Rest {
 
   public async delete<RES = unknown, REQ = unknown>(
     path: string,
-    options?: Partial<RequestOptions<REQ>>
+    options?: Partial<EnhancedRequestOptions<REQ>>
   ) {
     return await this.request<RES>({
       path,
@@ -63,8 +71,8 @@ export class Rest {
   }
 
   public async request<RES = unknown, REQ = unknown>(
-    options: RequestOptions<REQ>
-  ): Promise<RestResponse<RES>> {
+    options: EnhancedRequestOptions<REQ>
+  ): Promise<ApiResponse<RES>> {
     const interceptors = this.mergeInterceptors(options);
     if (interceptors.request?.length) {
       options = chainRequestInterceptors(options, interceptors.request);
@@ -75,7 +83,7 @@ export class Rest {
     }
 
     if (this.restOptions.cache && options.cache) {
-      const valueFromCache = await this.restOptions.cache?.get<RestResponse<RES>>?.(
+      const valueFromCache = await this.restOptions.cache?.get<ApiResponse<RES>>?.(
         options.cache.cacheKey
       );
       if (valueFromCache) {
@@ -122,7 +130,7 @@ export class Rest {
   }
 
   public responseWithInterceptors<RES = unknown>(
-    data: RestResponse<RES>,
+    data: ApiResponse<RES>,
     interceptors: ReturnType<typeof this.mergeInterceptors>
   ) {
     return interceptors.response.length
@@ -130,7 +138,7 @@ export class Rest {
       : data;
   }
 
-  public mergeInterceptors<REQ = unknown>(options: RequestOptions<REQ>) {
+  public mergeInterceptors<REQ = unknown>(options: EnhancedRequestOptions<REQ>) {
     const resInterceptors = this.restOptions.interceptors?.response ?? [];
     const reqInterceptors = this.restOptions.interceptors?.request ?? [];
 
@@ -144,11 +152,11 @@ export class Rest {
     if (!this.restOptions.cache) {
       throw new Error('Cache is not provided!');
     }
-    await this.restOptions.cache.del(cacheKey);
+    await this.restOptions.cache.delete(cacheKey);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public parseBody(parseAs: ParseBodyType, data: any) {
+  public parseBody(parseAs: BodyParserType, data: any) {
     switch (parseAs) {
       case 'JSON':
         return JSON.stringify(data);

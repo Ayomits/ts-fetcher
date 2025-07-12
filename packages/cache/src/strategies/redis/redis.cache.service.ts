@@ -1,7 +1,7 @@
-import { CacheService } from '../types';
+import { BaseCacheService } from '@ts-fetcher/types';
 import { Redis, RedisOptions } from 'ioredis';
 
-export class RedisCache implements CacheService {
+export class RedisCache implements BaseCacheService {
   private client: Redis;
   private isReady: boolean = false;
 
@@ -44,7 +44,7 @@ export class RedisCache implements CacheService {
     }
   }
 
-  public async get<T = unknown>(key: string): Promise<T | null> {
+  async get<T = unknown>(key: string): Promise<T | null> {
     try {
       await this.ensureConnection();
       const redisValue = await this.client.get(key);
@@ -60,7 +60,7 @@ export class RedisCache implements CacheService {
     }
   }
 
-  public async set<T>(key: string, value: T, ttl: number): Promise<void> {
+  async set<T>(key: string, value: T, ttl: number): Promise<void> {
     try {
       await this.ensureConnection();
       const valueToSet = typeof value === 'string' ? value : JSON.stringify(value);
@@ -75,7 +75,7 @@ export class RedisCache implements CacheService {
     }
   }
 
-  public async del(key: string): Promise<boolean> {
+  async delete(key: string): Promise<boolean> {
     try {
       await this.ensureConnection();
       const result = await this.client.del(key);
