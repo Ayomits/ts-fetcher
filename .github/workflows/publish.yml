@@ -11,28 +11,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 8
 
-      - name: Setup node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build
+      - name: Build packages
         run: pnpm run build
 
-      - name: Create and publish versions
+      - name: Publish changed packages
         uses: changesets/action@v1
         with:
-          commit: "chore: update versions"
-          title: "chore: update versions"
-          publish: pnpm run release
+          version: "chore: update versions [skip ci]"
+          publish: pnpm run release --filter=...[origin/main]
+          commit: "chore: update versions [skip ci]"
+          title: "chore: update versions [skip ci]"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
