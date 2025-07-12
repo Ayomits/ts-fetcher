@@ -1,5 +1,11 @@
 # @ts-fetcher/cache
 
+## 1.1.2
+
+### Patch Changes
+
+- Update package metadata. Added description and removed `<br>` tag from `Readme.md` in each package
+
 ## 1.1.1
 
 ### Patch Changes

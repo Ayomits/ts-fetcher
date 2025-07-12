@@ -1,5 +1,11 @@
 # @ts-fetcher/rest
 
+## 1.1.4
+
+### Patch Changes
+
+- Update package metadata. Added description and removed `<br>` tag from `Readme.md` in each package
+
 ## 1.1.3
 
 ### Patch Changes

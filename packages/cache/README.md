@@ -1,6 +1,6 @@
 # ts-fetcher
 
-TypeScript module for caching with 2 strategies <br>
+TypeScript module for caching with 2 strategies
 
 ## Features
 

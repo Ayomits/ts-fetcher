@@ -1,8 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "ts-fetcher",
+  "description": "Class and factory based wrapper over default fetch api with caching from the box",
   "module": "true",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "publishConfig": {

@@ -1,6 +1,6 @@
 # ts-fetcher
 
-TypeScript module for convenient fetch API handling <br>
+TypeScript module for convenient fetch API handling
 
 ## Features
 
