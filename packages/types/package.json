@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@ts-fetcher/types",
   "module": "true",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "publishConfig": {

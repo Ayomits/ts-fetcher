@@ -1,5 +1,11 @@
 # @ts-fetcher/rest
 
+## 1.1.3
+
+### Patch Changes
+
+- Patch packages for using @ts-fetcher/types
+
 ## 1.1.2
 
 ### Patch Changes
