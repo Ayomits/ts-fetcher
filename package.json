@@ -1,5 +1,4 @@
 {
-  "name": "ts-fetcher",
   "version": "1.0.0",
   "description": "Typescript module for comfortable fetch",
   "private": true,
@@ -31,7 +30,7 @@
     "lint:check": "npx turbo lint:check --concurrency=4",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "pnpm publish -r"
+    "release": "pnpm publish -r --no-git-checks --provenance"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
