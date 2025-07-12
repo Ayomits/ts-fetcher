@@ -36,7 +36,7 @@ jobs:
         uses: changesets/action@v1
         with:
           version: "chore: update versions [skip ci]"
-          publish: pnpm run release --filter=...[origin/main]
+          publish: pnpm run release
           commit: "chore: update versions [skip ci]"
           title: "chore: update versions [skip ci]"
         env:
