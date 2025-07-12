@@ -1,5 +1,5 @@
 {
-  "name": "ts-fetch",
+  "name": "ts-fetcher",
   "version": "1.0.0",
   "description": "Typescript module for comfortable fetch",
   "private": true,
