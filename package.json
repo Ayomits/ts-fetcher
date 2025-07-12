@@ -29,9 +29,12 @@
     "lint:fix": "npx turbo lint:fix --concurrency=4",
     "format:check": "npx turbo format:check --concurrency=4",
     "lint:check": "npx turbo lint:check --concurrency=4",
-    "publish": "npx turbo publish --concurrency=1"
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm build && pnpm version-packages && pnpm publish -r"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.5",
     "@types/node": "^24.0.13",
     "tsc-alias": "^1.8.16",
     "turbo": "^2.5.4",

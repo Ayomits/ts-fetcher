@@ -6,17 +6,22 @@ on:
       - main
 
 jobs:
-  lint-and-build:
-    name: Lint and Build
+  publish_npm:
+    name: Publish packages to npm
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install pnpm
-        run: npm instal -g pnpm
+        run: npm install -g pnpm
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -24,7 +29,7 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Publish
+      - name: Publish changed packages
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: pnpm publish --provenance --no-git-checks
+        run: pnpm changeset publish
