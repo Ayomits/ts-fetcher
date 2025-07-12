@@ -30,7 +30,7 @@
     "lint:check": "npx turbo lint:check --concurrency=4",
     "changeset": "changeset && pnpm run version-packages",
     "version-packages": "changeset version",
-    "release": "pnpm changeset publish"
+    "release": "pnpm publish -r"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
