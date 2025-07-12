@@ -29,25 +29,8 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Create .npmrc
-        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+      - name: Publish changed packages
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Check if packages exist
-        id: check-packages
-        run: |
-          echo "::set-output name=initial_publish::false"
-          if ! npm view ts-fetcher; then
-            echo "::set-output name=initial_publish::true"
-          fi
-
-      - name: Publish packages
-        if: steps.check-packages.outputs.initial_publish == 'true'
-        run: pnpm publish -r --no-git-checks --access public
-
-      - name: Publish with changeset
-        if: steps.check-packages.outputs.initial_publish == 'false'
-        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm changeset publish
+        run: pnpm run release
