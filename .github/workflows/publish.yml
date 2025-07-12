@@ -1,4 +1,4 @@
-name: Lint and Build
+name: Publish npm packages
 
 on:
   push:
@@ -27,4 +27,4 @@ jobs:
       - name: Publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: pnpm publish --token $NPM_TOKEN --provenance --no-git-checks
+        run: pnpm publish --provenance --no-git-checks
