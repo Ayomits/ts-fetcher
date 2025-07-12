@@ -9,6 +9,9 @@ jobs:
   publish_npm:
     name: Publish packages to npm
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     steps:
       - uses: actions/checkout@v4
         with:
