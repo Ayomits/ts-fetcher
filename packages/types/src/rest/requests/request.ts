@@ -80,7 +80,7 @@ export interface RequestLifecycleOptions {
   onRequestInit: <REQ extends EnhancedRequestOptions = EnhancedRequestOptions>(
     requestOptions: REQ,
     restOptions?: Partial<RestClientConfiguration>
-  ) => OnRequestInitReturn;
+  ) => Promise<OnRequestInitReturn>;
 }
 
 export interface EnhancedRequestOptions<

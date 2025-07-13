@@ -188,6 +188,56 @@ describe('Test rest request', () => {
     expect(await requestPromise).toThrowError(Error);
   });
 
+  test('On request init lifecycle hook', async () => {
+    const cache = new LocalCache();
+    const rest = createRestInstance(API_URL, { cache });
+
+    const makeOnRequestInit = vi.fn(async (requestOptions, restOptions) => {
+      const oldMock = restOptions.cache?.get('mock') || {};
+      const newMock = { ...oldMock, ...requestOptions.body };
+      await restOptions.cache?.set('mock', newMock, Infinity);
+      return {
+        forceReturn: true,
+        data: newMock,
+      };
+    });
+
+    const options: EnhancedRequestOptions = {
+      body: { hello: 'string' },
+      cache: { cacheKey: 'mock', ttl: Infinity },
+      lifecycle: { onRequestInit: makeOnRequestInit },
+      method: 'POST',
+      path: '/hallo',
+    };
+
+    const firstResponse = await rest.post('/hallo', options);
+    expect(firstResponse).toEqual({
+      cached: false,
+      data: { hello: 'string' },
+      options: expect.objectContaining({
+        method: 'POST',
+        path: '/hallo',
+      }),
+      success: true,
+    });
+    expect(makeOnRequestInit).toHaveBeenCalledTimes(1);
+
+    const fromCache = await cache.get('mock');
+    expect(fromCache).toEqual(firstResponse);
+
+    const secondResponse = await rest.post('/hallo', options);
+    expect(secondResponse).toEqual({
+      cached: true,
+      data: { hello: 'string' },
+      options: expect.objectContaining({
+        method: 'POST',
+        path: '/hallo',
+      }),
+      success: true,
+    });
+    expect(makeOnRequestInit).toHaveBeenCalledTimes(1);
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
   });
