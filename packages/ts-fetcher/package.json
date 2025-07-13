@@ -16,7 +16,8 @@
     "lint:check": "npx eslint src --ext .ts",
     "lint:fix": "npx eslint src --ext .ts --fix",
     "build": "npx tsc --build && npx tsc-alias",
-    "pipeline": "pnpm run format:fix && pnpm run lint:fix && pnpm run build"
+    "pipeline": "pnpm run format:fix && pnpm run lint:fix && pnpm run build",
+    "test": "vitest"
   },
   "repository": {
     "url": "https://github.com/Ayomits/ts-fetch"
@@ -33,7 +34,8 @@
     "eslint": "^9.30.1",
     "globals": "^16.3.0",
     "prettier": "^3.6.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   },
   "files": [
     "dist"

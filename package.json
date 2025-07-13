@@ -30,13 +30,16 @@
     "lint:check": "npx turbo lint:check --concurrency=4",
     "changeset": "changeset && pnpm run version-packages",
     "version-packages": "changeset version",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "test": "vitest"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
     "@types/node": "^24.0.13",
+    "@vitest/coverage-v8": "3.2.4",
     "tsc-alias": "^1.8.16",
     "turbo": "^2.5.4",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   }
 }

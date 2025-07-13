@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Timestamp } from '@/utility';
 
 // ==================== Cache Value Types ====================
@@ -20,22 +21,17 @@ export interface CacheRetrievalOptions<IncludeMetadata extends boolean = boolean
 
 // ==================== Core Cache Interfaces ====================
 export interface BaseCacheService {
-  get<T>(key: string): Promise<T | null> | T | null;
-  set<T>(key: string, value: T, ttl: number): Promise<void> | void;
+  get<T = any>(key: string): Promise<T | null> | T | null;
+  set<T = any>(key: string, value: T, ttl: number): Promise<void> | void;
   delete(key: string): Promise<boolean> | boolean;
 }
 
 export interface ExtendedCacheService extends BaseCacheService {
-  get<T = unknown, IncludeMetadata extends boolean = false>(
+  get<T = any, IncludeMetadata extends boolean = false>(
     key: string,
     options?: CacheRetrievalOptions<IncludeMetadata>
-  ): CacheRetrievalResult<IncludeMetadata, T> | null;
-
-  get<T = unknown>(key: string): T | null;
+  ):
+    | Promise<CacheRetrievalResult<IncludeMetadata, T> | null>
+    | CacheRetrievalResult<IncludeMetadata, T>
+    | null;
 }
-
-// ==================== Type Utilities ====================
-export type CacheServiceImplementation<T extends BaseCacheService = ExtendedCacheService> =
-  | BaseCacheService
-  | ExtendedCacheService
-  | T;
