@@ -77,16 +77,6 @@ export class Rest {
     if (interceptors.request?.length) {
       options = chainRequestInterceptors(options, interceptors.request);
     }
-    if (options.lifecycle?.onRequestInit) {
-      const requestInit = options.lifecycle.onRequestInit(options, this.restOptions);
-      if (requestInit.forceReturn) {
-        this.makeRequest(options);
-        return this.responseWithInterceptors(
-          this.makeResponse(requestInit.data, options, false, true),
-          interceptors
-        );
-      }
-    }
 
     // ==================CACHE RESPONSE==================
     if (!this.restOptions.cache && options.cache) {
@@ -98,10 +88,36 @@ export class Rest {
         options.cache.cacheKey
       );
       if (valueFromCache) {
-        return this.restOptions.interceptors?.executeOnCached ||
-          options.interceptors?.executeOnCached
-          ? this.responseWithInterceptors(valueFromCache, interceptors)
-          : valueFromCache;
+        const raw =
+          this.restOptions.interceptors?.executeOnCached || options.interceptors?.executeOnCached
+            ? this.responseWithInterceptors(valueFromCache, interceptors)
+            : valueFromCache;
+        return {
+          ...raw,
+          cached: true,
+        };
+      }
+    }
+
+    if (options.lifecycle?.onRequestInit) {
+      const requestInit = await options.lifecycle.onRequestInit(options, this.restOptions);
+      if (requestInit.forceReturn) {
+        const response = this.responseWithInterceptors<RES>(
+          this.makeResponse(requestInit.data, options, false, true),
+          interceptors
+        );
+
+        this.makeRequest(options);
+
+        if (options.cache) {
+          await this.restOptions.cache?.set(
+            options.cache?.cacheKey,
+            response,
+            options.cache?.ttl ?? Infinity
+          );
+        }
+
+        return response;
       }
     }
 
@@ -121,7 +137,6 @@ export class Rest {
           const res = await this.makeRequest(options);
           response = res;
           return res.ok;
-
         });
         if (isSuccess) {
           break;
@@ -215,6 +230,8 @@ export class Rest {
   public async parseBody(body: any, requestBody = true) {
     if (body == null) {
       return null;
+    } else if (typeof body === 'object' && requestBody) {
+      return JSON.stringify(body);
     } else if (typeof body === 'string') {
       try {
         return requestBody ? body : JSON.parse(body);
