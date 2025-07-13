@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  lint-and-build:
-    name: Lint and Build
+  lint-test-and-build:
+    name: Lint, test and build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,8 +32,8 @@ jobs:
       - name: Check lint
         run: pnpm run lint:check --affected
 
-      - name: Build
+      - name: Run build
         run: pnpm run build --affected
 
-      - name: Tests
+      - name: Run tests
         run: pnpm run test
