@@ -1,6 +1,6 @@
 import { LiteralEnum } from '@/utility';
 import { RequestInterceptor, ResponseInterceptor } from '@/rest/interceptors';
-import { CacheServiceImplementation } from '@/cache';
+import { BaseCacheService } from '@/cache';
 
 // ==================== Interceptors ====================
 export interface InterceptorConfiguration {
@@ -27,18 +27,8 @@ export const BodyParserType = {
 
 // ==================== Type Definitions ====================
 export type HttpMethodType = LiteralEnum<typeof HttpMethod>;
-export type BodyParserType = LiteralEnum<typeof BodyParserType>;
 
 // ==================== Request/Response Types ====================
-export interface RequestBody<T = unknown> {
-  data: T;
-  parseAs: BodyParserType;
-}
-
-export type MethodSpecificRequestBody<
-  Method extends HttpMethodType = HttpMethodType,
-  BodyData = unknown,
-> = Method extends typeof HttpMethod.Get ? null : RequestBody<BodyData>;
 
 export interface CacheConfiguration {
   cacheKey: string;
@@ -55,8 +45,8 @@ export interface BaseRequestOptions<
 
   // Network configuration
   origin?: string;
-  headers?: Headers;
-  body?: MethodSpecificRequestBody<Method, BodyData>;
+  headers?: Record<string, string>;
+  body?: BodyData;
   credentials?: RequestCredentials;
 
   // Cache configuration
@@ -70,28 +60,54 @@ export interface BaseRequestOptions<
   redirect?: RequestRedirect;
   referrer?: string;
   referrerPolicy?: ReferrerPolicy;
-  url?: string;
   keepalive?: boolean;
   signal?: AbortSignal;
   clone?: () => Request;
 }
 
+interface RefetchRequestOptions {
+  delay: number;
+  attemps: number;
+}
+
+export interface OnRequestInitReturn {
+  forceReturn?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any;
+}
+
+export interface RequestLifecycleOptions {
+  onRequestInit: <REQ extends EnhancedRequestOptions = EnhancedRequestOptions>(
+    requestOptions: REQ,
+    restOptions?: Partial<RestClientConfiguration>
+  ) => OnRequestInitReturn;
+}
+
 export interface EnhancedRequestOptions<
-  BodyData = unknown,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  BodyData = any,
   Method extends HttpMethodType = HttpMethodType,
 > extends BaseRequestOptions<BodyData, Method> {
   interceptors?: InterceptorConfiguration;
+  refetch?: RefetchRequestOptions;
+  lifecycle?: Partial<RequestLifecycleOptions>;
 }
 
 // ==================== Response Types ====================
-export interface ApiResponse<ResponseData = unknown> {
+export interface ApiResponse<
+  ResponseData = unknown,
+  BodyData = unknown,
+  Method extends HttpMethodType = HttpMethodType,
+> {
   success: boolean;
   data: ResponseData;
   cached: boolean;
+  options: EnhancedRequestOptions<BodyData, Method>;
 }
 
 // ==================== Instance Configuration ====================
 export interface RestClientConfiguration {
-  cache: CacheServiceImplementation;
+  cache: BaseCacheService;
   interceptors?: InterceptorConfiguration;
+  defaultRequestOptions?: Partial<EnhancedRequestOptions>;
 }

@@ -1,8 +1,9 @@
 import { RestClientConfiguration } from '@ts-fetcher/types';
 import { Rest } from './rest';
 
-interface CreateRestInstanceOptions<I extends Rest = Rest> extends RestClientConfiguration {
-  customInstance?: new (origin: string, options?: RestClientConfiguration) => I;
+export interface CreateRestInstanceOptions<I extends Rest = Rest>
+  extends Partial<RestClientConfiguration> {
+  customInstance?: new (origin: string, options?: Partial<RestClientConfiguration>) => I;
 }
 
 export function createRestInstance<I extends Rest = Rest>(

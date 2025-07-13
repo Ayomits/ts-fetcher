@@ -1,18 +1,19 @@
 import {
-  BaseCacheService,
   CachedValue,
   CacheRetrievalOptions,
   CacheRetrievalResult,
+  ExtendedCacheService,
 } from '@ts-fetcher/types';
 
-export class LocalCache implements BaseCacheService {
+export class LocalCache implements ExtendedCacheService {
   private cache: Map<string, CachedValue>;
 
   constructor() {
     this.cache = new Map();
   }
 
-  get<T = unknown, R extends boolean = false>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get<T = any, R extends boolean = false>(
     key: string,
     options?: CacheRetrievalOptions<R>
   ): CacheRetrievalResult<R, T> | null {

@@ -1,5 +1,13 @@
 # @ts-fetcher/types
 
+## 1.3.0
+
+### Minor Changes
+
+- Implemented refetch system and global options <br>
+  Remove createCache factory <br>
+  Simplified request bodies
+
 ## 1.2.1
 
 ### Patch Changes
