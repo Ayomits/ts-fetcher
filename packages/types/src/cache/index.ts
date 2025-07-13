@@ -16,7 +16,7 @@ export type CacheRetrievalResult<
 
 // ==================== Cache Options ====================
 export interface CacheRetrievalOptions<IncludeMetadata extends boolean = boolean> {
-  includeMetadata: IncludeMetadata; // Более описательное название
+  includeMetadata: IncludeMetadata;
 }
 
 // ==================== Core Cache Interfaces ====================
