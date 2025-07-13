@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  library_test:
-    name: Test all packages
+  publish_npm:
+    name: Publish packages to npm
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,33 +34,6 @@ jobs:
 
       - name: Build packages
         run: pnpm run build
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: |
-            packages/*/dist
-            node_modules
-          retention-days: 1
-
-  publish_npm:
-    name: Publish packages to npm
-    runs-on: ubuntu-latest
-    needs: library_test
-    permissions:
-      contents: write
-      packages: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-          path: .
 
       - name: Publish changed packages
         uses: changesets/action@v1
