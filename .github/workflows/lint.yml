@@ -1,4 +1,4 @@
-name: Lint and Build
+name: Lint, test, build
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -34,3 +34,6 @@ jobs:
 
       - name: Build
         run: pnpm run build --affected
+
+      - name: Tests
+        run: pnpm run test
