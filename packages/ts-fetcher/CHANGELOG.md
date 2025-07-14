@@ -1,5 +1,11 @@
 # ts-fetcher
 
+## 1.2.4
+
+### Patch Changes
+
+- Added implementations of redis and local caches rests. Also users can modify options in instances created using createRest
+
 ## 1.2.3
 
 ### Patch Changes

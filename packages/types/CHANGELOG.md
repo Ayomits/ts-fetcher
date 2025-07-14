@@ -1,5 +1,11 @@
 # @ts-fetcher/types
 
+## 1.3.1
+
+### Patch Changes
+
+- Added implementations of redis and local caches rests. Also users can modify options in instances created using createRest
+
 ## 1.3.0
 
 ### Minor Changes
