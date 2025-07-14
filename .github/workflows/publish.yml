@@ -36,7 +36,7 @@ jobs:
         run: pnpm run build
 
       - name: Test packages
-        run: pnpm run test
+        run: pnpm run test:ci
 
       - name: Publish changed packages
         uses: changesets/action@v1
