@@ -32,11 +32,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Test packages
-        run: pnpm run test
-
       - name: Build packages
         run: pnpm run build
+
+      - name: Test packages
+        run: pnpm run test
 
       - name: Publish changed packages
         uses: changesets/action@v1
