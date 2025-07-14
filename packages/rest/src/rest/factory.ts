@@ -18,8 +18,8 @@ export function createRestInstance<I extends Rest = Rest>(
     : new Rest(origin, options as RestClientConfiguration);
 }
 
-export function createRest(options: CreateRestInstanceOptions) {
-  const Extender = options.customInstance ?? Rest;
+export function createRest(options?: CreateRestInstanceOptions) {
+  const Extender = options?.customInstance ?? Rest;
 
   class CustomRest extends Extender {
     constructor(origin: string, modifiedOptions?: Partial<RestClientConfiguration>) {
@@ -29,7 +29,7 @@ export function createRest(options: CreateRestInstanceOptions) {
 
   function createCustomRestInstance(
     origin: string,
-    modifiedOptions: Partial<RestClientConfiguration>
+    modifiedOptions?: Partial<RestClientConfiguration>
   ) {
     return createRestInstance<CustomRest>(origin, {
       ...options,
