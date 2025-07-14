@@ -31,7 +31,8 @@
     "changeset": "changeset && pnpm run version-packages",
     "version-packages": "changeset version",
     "release": "changeset publish",
-    "test": "vitest"
+    "test:watch": "vitest",
+    "test:ci": "vitest --run"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
