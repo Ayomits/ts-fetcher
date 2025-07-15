@@ -83,7 +83,7 @@ export class Rest {
       throw new Error('Rest cache options is not provided!');
     }
 
-    if (this.restOptions.cache && options.cache) {
+    if (this.restOptions.cache && options.cache && !options.cache.force) {
       const valueFromCache = await this.restOptions.cache?.get<ApiResponse<RES>>?.(
         options.cache.cacheKey
       );

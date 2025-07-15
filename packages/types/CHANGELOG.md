@@ -1,5 +1,12 @@
 # @ts-fetcher/types
 
+## 1.4.0
+
+### Minor Changes
+
+- Added `force` option for request cache configuration <br>
+  If this option provided, it will override old cache and execute http request
+
 ## 1.3.1
 
 ### Patch Changes
