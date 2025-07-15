@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-      - dev
-
 jobs:
   publish_npm:
     name: Publish packages to npm
