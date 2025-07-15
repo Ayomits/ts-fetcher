@@ -43,10 +43,9 @@ jobs:
         uses: changesets/action@v1
         with:
           version: "chore: update versions [skip ci]"
-          publish: pnpm run release --tag ${ TARGET_BRANCH == "dev" && "dev" || "latest"}
+          publish: pnpm run release
           commit: "chore: update versions [skip ci]"
           title: "chore: update versions [skip ci]"
         env:
-          TARGET_BRANCH: ${{ github.ref_name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
