@@ -4,11 +4,11 @@ The library wrapper over fetch <br>
 
 Library has 3 main packages <br>
 
-<ol>
-  <li>ts-fetcher</li>
-  <li>@ts-fetcher/cache</li>
-  <li>@ts-fetcher/rest</li>
-</ol>
+
+1. [ts-fetcher](https://www.npmjs.com/package/ts-fetcher)
+2. [@ts-fetcher/cache](https://www.npmjs.com/package/@ts-fetcher/cache)
+3. [@ts-fetcher/rest](https://www.npmjs.com/package/@ts-fetcher/rest)
+
 
 If you want only use cache in your projects - install `@ts-fetcher/cache` <br>
 If you want only use our rest wrapper - install `@ts-fetcher/rest` <br>
