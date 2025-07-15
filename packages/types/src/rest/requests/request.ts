@@ -33,6 +33,10 @@ export type HttpMethodType = LiteralEnum<typeof HttpMethod>;
 export interface CacheConfiguration {
   cacheKey: string;
   ttl?: number;
+  /**
+   * If provided it will refetch query even if cached
+   */
+  force?: boolean;
 }
 
 export interface BaseRequestOptions<
