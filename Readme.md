@@ -20,7 +20,7 @@ Documenation links (temporary Readme.md): <br>
 2. [@ts-fetcher/cache](https://github.com/Ayomits/ts-fetch/tree/main/packages/cache)
 3. [@ts-fetcher/rest](https://github.com/Ayomits/ts-fetch/tree/main/packages/rest)
 
-## Development
+## Contributing
 
 1. Clone repository
 ```bash
@@ -33,10 +33,20 @@ git clone https://github.com/Ayomits/ts-fetch.git
 ```bash
 pnpm install
 ```
-
-3. Create fork
-4. Create PR
-5. Wait for review
+4. Create new branch from `dev`
+5. Write tests for your changes in `__tests__` folder using `.spec` prefix
+6. Run tests
+```bash
+pnpm run test:watch
+```
+7. Generate changelogs and version updates
+```bash
+pnpm run changeset
+```
+8. Create fork
+9. Push changes to your fork branch
+10. Create pull request
+11. Wait for review
 
 ## Rules
 
