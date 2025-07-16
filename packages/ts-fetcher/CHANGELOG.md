@@ -1,5 +1,11 @@
 # ts-fetcher
 
+## 1.3.0
+
+### Minor Changes
+
+- Use packages as main dependencies
+
 ## 1.2.4
 
 ### Patch Changes
