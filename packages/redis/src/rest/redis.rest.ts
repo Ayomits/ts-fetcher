@@ -1,4 +1,4 @@
-import { RedisCache } from '@/strategies/redis';
+import { RedisCache } from '../strategies/redis';
 import { createRest } from '@ts-fetcher/rest';
 import { RestClientConfiguration } from '@ts-fetcher/types';
 import { RedisOptions } from 'ioredis';
