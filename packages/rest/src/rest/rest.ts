@@ -176,7 +176,8 @@ export class Rest {
   public async makeRequest<REQ extends EnhancedRequestOptions = EnhancedRequestOptions>(
     options: REQ
   ) {
-    const body = options.body && options.method !== 'GET' ? await this.parseBody(options.body) : null;
+    const body =
+      options.body && options.method !== 'GET' ? await this.parseBody(options.body) : null;
 
     // @ts-expect-error I hate ts
     return await fetch(`${options.origin ?? this.origin}${options.path}`, {
