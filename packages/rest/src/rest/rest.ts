@@ -180,8 +180,8 @@ export class Rest {
 
     // @ts-expect-error I hate ts
     return await fetch(`${options.origin ?? this.origin}${options.path}`, {
-      body,
       ...options,
+      body,
     });
   }
 
