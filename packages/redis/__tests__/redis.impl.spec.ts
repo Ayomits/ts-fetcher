@@ -1,5 +1,5 @@
 import { describe, expect } from 'vitest';
-import { createRedisRest } from '../src';
+import { createRedisRest } from '../../ts-fetcher/src';
 
 const fakeConnect = {
   host: 'redis',
