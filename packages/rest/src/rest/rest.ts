@@ -250,7 +250,7 @@ export class Rest {
     } else if (body instanceof Blob) {
       return new Uint8Array(await body.arrayBuffer());
     } else if (body instanceof FormData) {
-      return new FormData(body);
+      return body;
     } else if ((body as Iterable<Uint8Array>)[Symbol.iterator]) {
       const chunks = [...(body as Iterable<Uint8Array>)];
 
