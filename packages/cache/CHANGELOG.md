@@ -1,5 +1,11 @@
 # @ts-fetcher/cache
 
+## 1.3.1
+
+### Patch Changes
+
+- Separate redis cache to single package
+
 ## 1.3.0
 
 ### Minor Changes
