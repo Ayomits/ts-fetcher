@@ -176,7 +176,7 @@ export class Rest {
   public async makeRequest<REQ extends EnhancedRequestOptions = EnhancedRequestOptions>(
     options: REQ
   ) {
-    const body = options.body && options.method !== 'GET' ? this.parseBody(options.body) : null;
+    const body = options.body && options.method !== 'GET' ? await this.parseBody(options.body) : null;
 
     // @ts-expect-error I hate ts
     return await fetch(`${options.origin ?? this.origin}${options.path}`, {
@@ -249,7 +249,7 @@ export class Rest {
     } else if (body instanceof Blob) {
       return new Uint8Array(await body.arrayBuffer());
     } else if (body instanceof FormData) {
-      return body;
+      return new FormData(body);
     } else if ((body as Iterable<Uint8Array>)[Symbol.iterator]) {
       const chunks = [...(body as Iterable<Uint8Array>)];
 
