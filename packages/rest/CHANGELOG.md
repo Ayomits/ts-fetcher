@@ -1,5 +1,11 @@
 # @ts-fetcher/rest
 
+## 1.3.1
+
+### Patch Changes
+
+- Fix body
+
 ## 1.3.0
 
 ### Minor Changes
