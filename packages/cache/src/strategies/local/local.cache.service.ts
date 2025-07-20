@@ -6,7 +6,7 @@ import {
 } from '@ts-fetcher/types';
 
 export class LocalCache implements ExtendedCacheService {
-  private cache: Map<string, CachedValue>;
+  protected cache: Map<string, CachedValue>;
 
   constructor() {
     this.cache = new Map();
@@ -54,5 +54,17 @@ export class LocalCache implements ExtendedCacheService {
     }
 
     return this.cache.delete(key);
+  }
+
+  clearAll() {
+    try {
+      Object.values(this.cache).forEach(
+        (item) => item.evictionTimeout && clearTimeout(item.evictionTimeout)
+      );
+      this.cache.clear();
+      return true;
+    } catch (err) {
+      throw new Error(`Error while clearing cache\n ${err}`);
+    }
   }
 }

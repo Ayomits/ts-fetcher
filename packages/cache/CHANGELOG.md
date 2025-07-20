@@ -1,5 +1,11 @@
 # @ts-fetcher/cache
 
+## 1.3.2
+
+### Patch Changes
+
+- Small feature "clearAll" for local cache. Allows clear cache and intervals when needed
+
 ## 1.3.1
 
 ### Patch Changes
