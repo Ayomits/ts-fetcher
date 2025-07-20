@@ -5,8 +5,9 @@ import {
   ExtendedCacheService,
 } from '@ts-fetcher/types';
 
-export class LocalCache implements ExtendedCacheService {
-  protected cache: Map<string, CachedValue>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class LocalCache<K extends string = string, V = any> implements ExtendedCacheService {
+  protected cache: Map<K, CachedValue<V>>;
 
   constructor() {
     this.cache = new Map();
@@ -14,7 +15,7 @@ export class LocalCache implements ExtendedCacheService {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get<T = any, R extends boolean = false>(
-    key: string,
+    key: K,
     options?: CacheRetrievalOptions<R>
   ): CacheRetrievalResult<R, T> | null {
     const value = this.cache.get(key);
@@ -28,7 +29,7 @@ export class LocalCache implements ExtendedCacheService {
     return (options?.includeMetadata ? value : value.data) as CacheRetrievalResult<R, T>;
   }
 
-  set<T = unknown>(key: string, value: T, ttl: number): void {
+  set<T = unknown>(key: K, value: T, ttl: number): void {
     const now = Date.now();
     const expiresAt = Number.isFinite(ttl) && ttl !== Infinity ? now + ttl : null;
 
@@ -39,13 +40,13 @@ export class LocalCache implements ExtendedCacheService {
 
     this.cache.set(key, {
       createdAt: now,
-      data: value,
+      data: value as unknown as V,
       evictionTimeout: expiresAt ? setTimeout(() => this.delete(key), ttl) : null,
       expiresAt,
     });
   }
 
-  delete(key: string): boolean {
+  delete(key: K): boolean {
     const value = this.cache.get(key);
     if (!value) return false;
 
