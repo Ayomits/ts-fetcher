@@ -1,5 +1,11 @@
 # @ts-fetcher/cache
 
+## 1.4.1
+
+### Patch Changes
+
+- Added entries, toObject, values methods (some of them from Map)
+
 ## 1.4.0
 
 ### Minor Changes

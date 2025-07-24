@@ -13,6 +13,22 @@ export class LocalCache<K extends string = string, V = any> implements ExtendedC
     this.cache = new Map();
   }
 
+  entries() {
+    return this.cache.entries();
+  }
+
+  keys() {
+    return this.cache.keys();
+  }
+
+  values() {
+    return this.cache.values();
+  }
+
+  toObject() {
+    return Object.fromEntries(this.entries());
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get<T = any, R extends boolean = false>(
     key: K,
