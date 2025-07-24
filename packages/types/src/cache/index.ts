@@ -22,7 +22,12 @@ export interface CacheRetrievalOptions<IncludeMetadata extends boolean = boolean
 // ==================== Core Cache Interfaces ====================
 export interface BaseCacheService {
   get<T = any>(key: string): Promise<T | null> | T | null;
-  set<T = any>(key: string, value: T, ttl: number): Promise<void> | void;
+  set<T = any>(
+    key: string,
+    value: T,
+    ttl: number,
+    onExpire?: (key: string, value: T, raw: Omit<CachedValue<T>, 'evictionTimeout'>) => void
+  ): Promise<void> | void;
   delete(key: string): Promise<boolean> | boolean;
 }
 

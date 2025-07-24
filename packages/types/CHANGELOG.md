@@ -1,5 +1,11 @@
 # @ts-fetcher/types
 
+## 1.4.1
+
+### Patch Changes
+
+- Added optional onExpire option to base cache interface. It won't work in redis <3
+
 ## 1.4.0
 
 ### Minor Changes
