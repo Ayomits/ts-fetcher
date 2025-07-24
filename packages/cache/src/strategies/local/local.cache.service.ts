@@ -29,7 +29,13 @@ export class LocalCache<K extends string = string, V = any> implements ExtendedC
     return (options?.includeMetadata ? value : value.data) as CacheRetrievalResult<R, T>;
   }
 
-  set<T = unknown>(key: K, value: T, ttl: number): void {
+  // @ts-expect-error I hate ts
+  set<T extends V = V>(
+    key: K,
+    value: T,
+    ttl: number,
+    onExpire?: (key: string, value: T, raw: Omit<CachedValue<T>, 'evictionTimeout'>) => void
+  ): void {
     const now = Date.now();
     const expiresAt = Number.isFinite(ttl) && ttl !== Infinity ? now + ttl : null;
 
@@ -38,12 +44,22 @@ export class LocalCache<K extends string = string, V = any> implements ExtendedC
       clearTimeout(existing.evictionTimeout);
     }
 
-    this.cache.set(key, {
+    const raw: Partial<CachedValue<V>> = {
       createdAt: now,
       data: value as unknown as V,
-      evictionTimeout: expiresAt ? setTimeout(() => this.delete(key), ttl) : null,
       expiresAt,
-    });
+    };
+
+    raw.evictionTimeout = expiresAt
+      ? setTimeout(() => {
+          this.delete(key);
+          // @ts-expect-error idk
+          onExpire?.(key, value, raw);
+        }, ttl)
+      : null;
+
+    // @ts-expect-error idk
+    this.cache.set(key, raw);
   }
 
   delete(key: K): boolean {
