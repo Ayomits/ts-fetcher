@@ -1,2 +1,2 @@
-export * from './literal-enum';
-export * from './timestamp';
+export type * from './literal-enum';
+export type * from './timestamp';

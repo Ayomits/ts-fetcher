@@ -1,5 +1,11 @@
 # @ts-fetcher/types
 
+## 1.4.2
+
+### Patch Changes
+
+- Fix TS2742
+
 ## 1.4.1
 
 ### Patch Changes

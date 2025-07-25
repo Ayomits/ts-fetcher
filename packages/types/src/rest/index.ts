@@ -1,2 +1,2 @@
-export * from './requests';
-export * from './interceptors';
+export type * from './requests';
+export type * from './interceptors';

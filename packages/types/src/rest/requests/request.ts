@@ -1,6 +1,6 @@
-import { LiteralEnum } from '@/utility';
-import { RequestInterceptor, ResponseInterceptor } from '@/rest/interceptors';
-import { BaseCacheService } from '@/cache';
+import type { LiteralEnum } from '@/utility';
+import type { RequestInterceptor, ResponseInterceptor } from '@/rest/interceptors';
+import type { BaseCacheService } from '@/cache';
 
 // ==================== Interceptors ====================
 export interface InterceptorConfiguration {

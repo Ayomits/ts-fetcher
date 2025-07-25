@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Timestamp } from '@/utility';
+import type { Timestamp } from '@/utility';
 
 // ==================== Cache Value Types ====================
 export interface CachedValue<T = unknown> {
