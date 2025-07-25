@@ -1,4 +1,4 @@
-import { ApiResponse, EnhancedRequestOptions } from '@/rest';
+import type { ApiResponse, EnhancedRequestOptions } from '@/rest';
 
 // ==================== Core Interceptor Types ====================
 export type RequestInterceptor<RequestBody = unknown> = (

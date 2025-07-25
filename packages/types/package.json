@@ -2,11 +2,18 @@
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@ts-fetcher/types",
   "description": "Types for @ts-fetcher packages",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "publishConfig": {
     "access": "public"
+  },
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.d.cjs"
+    }
   },
   "packageManager": "pnpm@10.12.1",
   "scripts": {

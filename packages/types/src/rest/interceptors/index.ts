@@ -1,1 +1,1 @@
-export * from './interceptor';
+export type * from './interceptor';
