@@ -28,11 +28,9 @@ There are two ways how to use cache
 1. Local cache (in-memory)
 
 ```ts
-import { createCache, LocalCache } from '@ts-fetcher/cache';
+import { LocalCache } from '@ts-fetcher/cache';
 
-const factoryWay = createCache('local');
-
-const instanceWay = new LocalCache();
+const local = new LocalCache();
 ```
 
 2. Redis cache (ioredis backend)
@@ -40,29 +38,27 @@ const instanceWay = new LocalCache();
 Install ioredis
 
 ```bash
-npm install ioredis
+npm install ioredis @ts-fetcher/redis
 # or
-yarn add ioredis
+yarn add ioredis @ts-fetcher/redis
 # or
-bun add ioredis
+bun add ioredis @ts-fetcher/redis
 # or
-pnpm add ioredis
+pnpm add ioredis @ts-fetcher/redis
 ```
 
 ```ts
-import { createCache, RedisCache } from '@ts-fetcher/cache';
+import { RedisCache, LocalCache } from '@ts-fetcher/cache';
 
-const factoryWay = createCache('local', {
+const local = new LocalCache();
+
+const redis = new RedisCache({
   host: 'localhost',
   password: 'redis',
   port: 6379,
 });
 
-const instanceWay = new RedisCache({
-  host: 'localhost',
-  password: 'redis',
-  port: 6379,
-});
+await redis.set('key', 'value', 500);
 ```
 
 ## Cache usage
@@ -72,61 +68,74 @@ For this examples not important what kind of strategy have you choosen
 1. Get
 
 ```ts
-import { createCache } from '@ts-fetcher/cache';
+import { LocalCache } from '@ts-fetcher/cache';
 
-const factoryWay = createCache('local');
+const local = new LocalCache();
 
 // no type assertion
-await factoryWay.get("key-primitive")
+local.get('key-primitive');
 
 // with type assertion
-await factoryWay.get<object>("key-assertion")
-
+local.get<object>('key-assertion');
 ```
 
 2. Set
-```ts
-import { createCache } from '@ts-fetcher/cache';
 
-const factoryWay = createCache('local');
+```ts
+import { LocalCache } from '@ts-fetcher/cache';
+
+const local = new LocalCache();
 
 // no type assertion
-await factoryWay.set("key-primitive", 10)
+local.set('key-primitive', 10);
 
 // this value will be removed after 500 miliseconds
-await factoryWay.set<object>("key-assertion", { hello: "world" }, 500)
+local.set<object>('key-assertion', { hello: 'world' }, 500);
 
 // this value will be cached forever
-await factoryWay.set<object>("key-assertion", { hello: "world" })
+local.set<object>('key-assertion', { hello: 'world' }, Infinity);
+
+// Lifecycle
+// After expiration will
+
+const onExpire = (key, value, raw) => {
+  console.log(key);
+};
+
+local.set<object>('key-assertion', { hello: 'world' }, 1_000, onExpire);
 ```
 
 3. Del
 
 ```ts
-import { createCache } from '@ts-fetcher/cache';
+import { LocalCache } from '@ts-fetcher/cache';
 
-const factoryWay = createCache('local');
+const local = new LocalCache();
 
 // it will delete value by key
-await factoryWay.del("key-primitive")
+local.del('key-primitive');
 ```
-
 
 ## Custom cache
 
 ```ts
-import { CacheService } from 'ts-fetcher';
+import { CacheService, type CachedValue } from 'ts-fetcher';
 
 class CustomCache implements CacheService {
-  async get<T>(key: string): Promise<T | null> {
+  get<T>(key: string): T | null {
     // Your implementation
   }
 
-  async set<T>(key: string, value: T, ttl: number): Promise<void> {
+  set<T>(
+    key: string,
+    value: T,
+    ttl: number,
+    onExpire?: (key: string, value: T, raw: Omit<CachedValue<T>, 'evictionTimeout'>) => void
+  ): void {
     // Your implementation
   }
 
-  async del(key: string): Promise<boolean> {
+  del(key: string): boolean {
     // Your implementation
   }
 }

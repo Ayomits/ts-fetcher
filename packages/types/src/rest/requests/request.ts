@@ -111,7 +111,7 @@ export interface ApiResponse<
 
 // ==================== Instance Configuration ====================
 export interface RestClientConfiguration {
-  cache: BaseCacheService;
+  cache?: BaseCacheService;
   interceptors?: InterceptorConfiguration;
   defaultRequestOptions?: Partial<EnhancedRequestOptions>;
 }
