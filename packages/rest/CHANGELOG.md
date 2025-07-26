@@ -1,5 +1,24 @@
 # @ts-fetcher/rest
 
+## 1.4.1
+
+### Patch Changes
+
+- Documentation updates
+- Updated dependencies
+  - @ts-fetcher/types@1.5.1
+
+## 1.4.0
+
+### Minor Changes
+
+- The main ts-fetcher was removed, it can decrease the size of them
+
+### Patch Changes
+
+- Updated dependencies
+  - @ts-fetcher/types@1.5.0
+
 ## 1.3.4
 
 ### Patch Changes

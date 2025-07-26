@@ -1,5 +1,17 @@
 # @ts-fetcher/types
 
+## 1.5.1
+
+### Patch Changes
+
+- Documentation updates
+
+## 1.5.0
+
+### Minor Changes
+
+- The main ts-fetcher was removed, it can decrease the size of them
+
 ## 1.4.2
 
 ### Patch Changes

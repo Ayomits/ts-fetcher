@@ -4,21 +4,19 @@ The library wrapper over fetch <br>
 
 Library has 3 main packages <br>
 
-
-1. [ts-fetcher](https://www.npmjs.com/package/ts-fetcher)
+1. [@ts-fetcher/rest](https://www.npmjs.com/package/@ts-fetcher/rest)
 2. [@ts-fetcher/cache](https://www.npmjs.com/package/@ts-fetcher/cache)
-3. [@ts-fetcher/rest](https://www.npmjs.com/package/@ts-fetcher/rest)
+3. [@ts-fetcher/redis](https://www.npmjs.com/package/@ts-fetcher/redis)
 
 
-If you want only use cache in your projects - install `@ts-fetcher/cache` <br>
-If you want only use our rest wrapper - install `@ts-fetcher/rest` <br>
-If you need it all - install `ts-fetcher`
+If you want only use cache in your projects - install `@ts-fetcher/cache` or redis `@ts-fetcher/redis` <br>
+If you want only use rest wrapper - install `@ts-fetcher/rest` <br>
 
-Documenation links (temporary Readme.md): <br>
+Documenation links<br>
 
-1. [ts-fetcher](https://github.com/Ayomits/ts-fetch/tree/main/packages/ts-fetcher)
+1. [@ts-fetcher/rest](https://github.com/Ayomits/ts-fetch/tree/main/packages/rest)
 2. [@ts-fetcher/cache](https://github.com/Ayomits/ts-fetch/tree/main/packages/cache)
-3. [@ts-fetcher/rest](https://github.com/Ayomits/ts-fetch/tree/main/packages/rest)
+3. [@ts-fetcher/redis](https://github.com/Ayomits/ts-fetch/tree/main/packages/redis)
 
 ## Contributing
 

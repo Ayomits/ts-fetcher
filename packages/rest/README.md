@@ -33,11 +33,77 @@ const defaultRest = new Rest('https://api.example.com');
 2. Using factories
 
 ```ts
+// Create own class and own factory
 import { createRest, createCache } from '@ts-fetcher/rest';
 
 const { CustomRest: LocalRest, createCustomRestInstance: createLocalRest } = createRest();
 
 const localRest = createLocalRest('https://api.example.com');
+
+// Or create from existed
+import { createRestInstance } from '@ts-fetcher/rest';
+
+const localRest = createRestInstance('https://api.example.com');
+```
+
+## Caching
+
+If you need to cache your responses, download this
+
+```bash
+npm install @ts-fetcher/cache
+# or
+yarn add @ts-fetcher/cache
+# or
+bun add @ts-fetcher/cache
+# or
+pnpm add @ts-fetcher/cache
+```
+
+If you need redis
+
+```bash
+npm install @ts-fetcher/redis ioredis
+# or
+yarn add @ts-fetcher/redis ioredis
+# or
+bun add @ts-fetcher/redis ioredis
+# or
+pnpm add @ts-fetcher/redis ioredis
+```
+
+Create instance using 1 of ways
+
+```ts
+import { createRestInstance } from '@ts-fetcher/rest';
+import { LocalCache, RedisCache } from '@ts-fetcher/cache';
+
+// Local cache
+const localRest = createRestInstance('https://api.example.com', {
+  cache: new LocalCache(),
+});
+
+// Or Redis
+const redisRest = createRestInstance('https://api.example.com', {
+  cache: new RedisCache({
+    host: 'redis',
+    port: 6379,
+  }),
+});
+```
+
+## Set global options for each request
+
+```ts
+const localRest = createRestInstance('https://api.example.com', {
+  cache: new LocalCache(),
+  // this options will applied to all requests
+  defaultRequestOptions: {
+    headers: {
+      Authorization: 'PvashkaTokenApzdClan',
+    },
+  },
+});
 ```
 
 ## Making requests
@@ -65,7 +131,21 @@ const { data } = await rest.get<User>('/users/1');
 
 // Typed POST/PUT/PATCH
 await rest.post<User, UpdateUserDto>('/users', {
-  name: 'John',
+  body: {
+    name: 'John',
+  },
+});
+```
+
+3. Cached requests
+
+```ts
+await rest.get('/users', {
+  cache: {
+    cacheKey: 'idk',
+    // if not provided -> it will cached forever
+    ttl: 500,
+  },
 });
 ```
 
@@ -127,14 +207,6 @@ await exampleRest.get("/path", {
     // This interceptors are local, they will work for only for this request
     request: [NextReqInterceptor],
     response: [NextResInterceptor]
-  }
-})
-
-await exampleRest.get("/path", {
-  interceptors: {
-    // This interceptors are local, they will work for only for this request
-    request: [NextReqInterceptor],
-    response: [NextResInterceptor],
   }
 })
 ```
