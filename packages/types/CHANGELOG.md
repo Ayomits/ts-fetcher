@@ -1,5 +1,11 @@
 # @ts-fetcher/types
 
+## 1.5.2
+
+### Patch Changes
+
+- Rename propety cache to caching (cache name throws error)
+
 ## 1.5.1
 
 ### Patch Changes

@@ -23,13 +23,13 @@ describe('Test for cached requests', () => {
     const globalCache = new LocalCache();
 
     const rest = createRestInstance(API_URL, {
-      cache: globalCache,
+      caching: globalCache,
     });
 
     const options: EnhancedRequestOptions = {
       method: 'GET',
       path: '/hello',
-      cache: {
+      caching: {
         cacheKey: 'mock',
         ttl: Infinity,
       },
@@ -51,7 +51,7 @@ describe('Test for cached requests', () => {
     const globalCache = new LocalCache();
 
     const rest = createRestInstance(API_URL, {
-      cache: globalCache,
+      caching: globalCache,
     });
 
     vi.useFakeTimers();
@@ -61,7 +61,7 @@ describe('Test for cached requests', () => {
     const options: EnhancedRequestOptions = {
       method: 'GET',
       path: '/hello',
-      cache: {
+      caching: {
         cacheKey: 'mock',
         ttl: validttl,
       },
@@ -70,7 +70,7 @@ describe('Test for cached requests', () => {
     const invalidTtl = async (ttl: number) => {
       return await rest.get('/hello', {
         ...options,
-        cache: {
+        caching: {
           ttl,
           cacheKey: 'mock',
         },
@@ -97,16 +97,16 @@ describe('Test for cached requests', () => {
     vi.useRealTimers();
   });
 
-  test('Force cache options', async () => {
+  test('Force caching options', async () => {
     const globalCache = new LocalCache();
 
     const rest = createRestInstance(API_URL, {
-      cache: globalCache,
+      caching: globalCache,
     });
 
     const options: EnhancedRequestOptions = {
       method: 'GET',
-      cache: {
+      caching: {
         cacheKey: 'mock-force',
         ttl: Infinity,
       },
@@ -116,14 +116,14 @@ describe('Test for cached requests', () => {
     const query = async (reqoptions: EnhancedRequestOptions = options) =>
       await rest.get('/hello', reqoptions);
 
-    // Default cache checks
+    // Default caching checks
     expect(await query()).toEqual(rest.makeResponse(mockData, options, false, true));
     expect(await query()).toEqual(rest.makeResponse(mockData, options, true, true));
 
     const forceOptions: EnhancedRequestOptions = {
       ...options,
-      cache: {
-        ...options.cache!,
+      caching: {
+        ...options.caching!,
         force: true,
       },
     };

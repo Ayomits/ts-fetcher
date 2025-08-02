@@ -6,6 +6,6 @@ import { RedisOptions } from 'ioredis';
 export function createRedisRest(redisConnect: RedisOptions, restOptions?: RestClientConfiguration) {
   return createRest({
     ...restOptions,
-    cache: new RedisCache(redisConnect),
+    caching: new RedisCache(redisConnect),
   });
 }
