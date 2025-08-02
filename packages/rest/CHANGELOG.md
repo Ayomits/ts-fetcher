@@ -1,5 +1,13 @@
 # @ts-fetcher/rest
 
+## 1.4.2
+
+### Patch Changes
+
+- Rename propety cache to caching (cache name throws error)
+- Updated dependencies
+  - @ts-fetcher/types@1.5.2
+
 ## 1.4.1
 
 ### Patch Changes

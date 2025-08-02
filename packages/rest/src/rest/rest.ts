@@ -78,13 +78,13 @@ export class Rest {
     }
 
     // ==================CACHE RESPONSE==================
-    if (!this.restOptions.cache && options.cache) {
-      throw new Error('Rest cache options is not provided!');
+    if (!this.restOptions.caching && options.caching) {
+      throw new Error('Rest caching options is not provided!');
     }
 
-    if (this.restOptions.cache && options.cache && !options.cache.force) {
-      const valueFromCache = await this.restOptions.cache?.get<ApiResponse<RES>>?.(
-        options.cache.cacheKey
+    if (this.restOptions.caching && options.caching && !options.caching.force) {
+      const valueFromCache = await this.restOptions.caching?.get<ApiResponse<RES>>?.(
+        options.caching.cacheKey
       );
       if (valueFromCache) {
         const raw =
@@ -108,11 +108,11 @@ export class Rest {
 
         this.makeRequest(options);
 
-        if (options.cache) {
-          await this.restOptions.cache?.set(
-            options.cache?.cacheKey,
+        if (options.caching) {
+          await this.restOptions.caching?.set(
+            options.caching?.cacheKey,
             response,
-            options.cache?.ttl ?? Infinity
+            options.caching?.ttl ?? Infinity
           );
         }
 
@@ -155,11 +155,11 @@ export class Rest {
       response.ok
     );
 
-    if (options.cache && this.restOptions.cache) {
-      await this.restOptions.cache.set(
-        options.cache.cacheKey,
+    if (options.caching && this.restOptions.caching) {
+      await this.restOptions.caching.set(
+        options.caching.cacheKey,
         formated,
-        options.cache.ttl ?? Infinity
+        options.caching.ttl ?? Infinity
       );
     }
 
@@ -178,7 +178,6 @@ export class Rest {
     const body =
       options.body && options.method !== 'GET' ? await this.parseBody(options.body) : null;
 
-    // @ts-expect-error I hate ts
     return await fetch(`${options.origin ?? this.origin}${options.path}`, {
       ...options,
       body,
@@ -220,10 +219,10 @@ export class Rest {
   }
 
   public async invalidate(cacheKey: string) {
-    if (!this.restOptions.cache) {
+    if (!this.restOptions.caching) {
       throw new Error('Cache is not provided!');
     }
-    await this.restOptions.cache.delete(cacheKey);
+    await this.restOptions.caching.delete(cacheKey);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -117,7 +117,7 @@ describe('Test rest request', () => {
 
   test('On request init lifecycle hook', async () => {
     const cache = new LocalCache();
-    const rest = createRestInstance(API_URL, { cache });
+    const rest = createRestInstance(API_URL, { caching: cache });
 
     const makeOnRequestInit = vi.fn(async (requestOptions, restOptions) => {
       const oldMock = restOptions.cache?.get('mock') || {};
@@ -131,7 +131,7 @@ describe('Test rest request', () => {
 
     const options: EnhancedRequestOptions = {
       body: { hello: 'string' },
-      cache: { cacheKey: 'mock', ttl: Infinity },
+      caching: { cacheKey: 'mock', ttl: Infinity },
       lifecycle: { onRequestInit: makeOnRequestInit },
       method: 'POST',
       path: '/hallo',
@@ -150,7 +150,7 @@ describe('Test rest request', () => {
     expect(makeOnRequestInit).toHaveBeenCalledTimes(1);
 
     const fromCache = await cache.get('mock');
-    expect(fromCache).toEqual(firstResponse);
+    expect(fromCache). toEqual(firstResponse);
 
     const secondResponse = await rest.post('/hallo', options);
     expect(secondResponse).toEqual({

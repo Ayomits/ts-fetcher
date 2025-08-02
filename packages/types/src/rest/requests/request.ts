@@ -54,7 +54,7 @@ export interface BaseRequestOptions<
   credentials?: RequestCredentials;
 
   // Cache configuration
-  cache?: CacheConfiguration;
+  caching?: CacheConfiguration;
 
   // Browser fetch options
   cookie?: string;
@@ -111,7 +111,7 @@ export interface ApiResponse<
 
 // ==================== Instance Configuration ====================
 export interface RestClientConfiguration {
-  cache?: BaseCacheService;
+  caching?: BaseCacheService;
   interceptors?: InterceptorConfiguration;
   defaultRequestOptions?: Partial<EnhancedRequestOptions>;
 }
