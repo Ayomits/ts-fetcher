@@ -106,6 +106,7 @@ export interface ApiResponse<
   success: boolean;
   data: ResponseData;
   cached: boolean;
+  raw: Response;
   options: EnhancedRequestOptions<BodyData, Method>;
 }
 

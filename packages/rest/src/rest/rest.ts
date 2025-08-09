@@ -1,5 +1,8 @@
 import { ApiResponse, EnhancedRequestOptions, RestClientConfiguration } from '@ts-fetcher/types';
 import { chainRequestInterceptors, chainResponseInterceptors, sleepWithCallback } from '../';
+import { defaultRestOptions } from './options';
+
+type RequestOptions<REQ> = Omit<Partial<EnhancedRequestOptions<REQ>>, 'origin' | 'method' | 'path'>;
 
 export class Rest {
   public origin: string;
@@ -7,13 +10,11 @@ export class Rest {
 
   constructor(origin: string, options?: Partial<RestClientConfiguration>) {
     this.origin = origin;
-    this.restOptions = options ?? {};
+    this.restOptions =
+      typeof options != 'undefined' ? { ...defaultRestOptions, ...options } : defaultRestOptions;
   }
 
-  public async get<RES = unknown>(
-    path: string,
-    options?: Omit<Partial<EnhancedRequestOptions>, 'body'>
-  ) {
+  public async get<RES = unknown>(path: string, options?: Omit<RequestOptions<RES>, 'body'>) {
     return await this.request<RES>({
       path,
       method: 'GET',
@@ -21,10 +22,7 @@ export class Rest {
     });
   }
 
-  public async post<RES = unknown, REQ = unknown>(
-    path: string,
-    options?: Partial<EnhancedRequestOptions<REQ>>
-  ) {
+  public async post<RES = unknown, REQ = unknown>(path: string, options?: RequestOptions<REQ>) {
     return await this.request<RES>({
       path,
       method: 'POST',
@@ -32,10 +30,7 @@ export class Rest {
     });
   }
 
-  public async put<RES = unknown, REQ = unknown>(
-    path: string,
-    options?: Partial<EnhancedRequestOptions<REQ>>
-  ) {
+  public async put<RES = unknown, REQ = unknown>(path: string, options?: RequestOptions<REQ>) {
     return await this.request<RES>({
       path,
       method: 'PUT',
@@ -43,10 +38,7 @@ export class Rest {
     });
   }
 
-  public async patch<RES = unknown, REQ = unknown>(
-    path: string,
-    options?: Partial<EnhancedRequestOptions<REQ>>
-  ) {
+  public async patch<RES = unknown, REQ = unknown>(path: string, options?: RequestOptions<REQ>) {
     return await this.request<RES>({
       path,
       method: 'DELETE',
@@ -54,10 +46,7 @@ export class Rest {
     });
   }
 
-  public async delete<RES = unknown, REQ = unknown>(
-    path: string,
-    options?: Partial<EnhancedRequestOptions<REQ>>
-  ) {
+  public async delete<RES = unknown, REQ = unknown>(path: string, options?: RequestOptions<REQ>) {
     return await this.request<RES>({
       path,
       method: 'DELETE',
@@ -152,7 +141,8 @@ export class Rest {
       await this.parseJsonResponse(response),
       options,
       true,
-      response.ok
+      response.ok,
+      response
     );
 
     if (options.caching && this.restOptions.caching) {
@@ -178,10 +168,13 @@ export class Rest {
     const body =
       options.body && options.method !== 'GET' ? await this.parseBody(options.body) : null;
 
-    return await fetch(`${options.origin ?? this.origin}${options.path}`, {
-      ...options,
-      body,
-    });
+    return await fetch(
+      `${options.origin ?? this.origin}${options.path.startsWith('/') ? options.path : '/' + options.path}`,
+      {
+        ...options,
+        body,
+      }
+    );
   }
 
   public makeResponse<REQ extends EnhancedRequestOptions = EnhancedRequestOptions>(
@@ -189,12 +182,14 @@ export class Rest {
     data: any,
     options: REQ,
     cached = false,
-    success = true
+    success = true,
+    raw: Response = new Response()
   ): ApiResponse<typeof data, REQ, typeof options.method> {
     return {
       data,
       cached,
       success,
+      raw,
       options,
     };
   }

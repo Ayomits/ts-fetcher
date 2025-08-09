@@ -1,5 +1,13 @@
 # @ts-fetcher/rest
 
+## 1.4.3
+
+### Patch Changes
+
+- Added `raw` field to ApiResponse type
+- Updated dependencies
+  - @ts-fetcher/types@1.5.3
+
 ## 1.4.2
 
 ### Patch Changes
