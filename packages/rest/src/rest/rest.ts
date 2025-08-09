@@ -1,6 +1,6 @@
 import { ApiResponse, EnhancedRequestOptions, RestClientConfiguration } from '@ts-fetcher/types';
 import { chainRequestInterceptors, chainResponseInterceptors, sleepWithCallback } from '../';
-import { defaultRestOptions } from './options';
+import { defaultRequestOptions, defaultRestOptions } from './options';
 
 type RequestOptions<REQ> = Omit<Partial<EnhancedRequestOptions<REQ>>, 'origin' | 'method' | 'path'>;
 
@@ -10,8 +10,13 @@ export class Rest {
 
   constructor(origin: string, options?: Partial<RestClientConfiguration>) {
     this.origin = origin;
-    this.restOptions =
-      typeof options != 'undefined' ? { ...defaultRestOptions, ...options } : defaultRestOptions;
+    this.restOptions = {
+      defaultRequestOptions: {
+        ...defaultRequestOptions,
+        ...options?.defaultRequestOptions,
+      },
+      ...options,
+    };
   }
 
   public async get<RES = unknown>(path: string, options?: Omit<RequestOptions<RES>, 'body'>) {
