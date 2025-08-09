@@ -76,52 +76,6 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.0.13)(jiti@2.4.2)(lightningcss@1.30.1)
 
-  packages/redis:
-    dependencies:
-      '@ts-fetcher/types':
-        specifier: workspace:^
-        version: link:../types
-    devDependencies:
-      '@eslint/eslintrc':
-        specifier: ^3.3.1
-        version: 3.3.1
-      '@eslint/js':
-        specifier: ^9.30.1
-        version: 9.30.1
-      '@ts-fetcher/rest':
-        specifier: workspace:^
-        version: link:../rest
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^8.36.0
-        version: 8.36.0(@typescript-eslint/parser@8.36.0(eslint@9.30.1(jiti@2.4.2))(typescript@5.8.3))(eslint@9.30.1(jiti@2.4.2))(typescript@5.8.3)
-      '@typescript-eslint/parser':
-        specifier: ^8.36.0
-        version: 8.36.0(eslint@9.30.1(jiti@2.4.2))(typescript@5.8.3)
-      esbuild-plugin-version-injector:
-        specifier: ^1.2.1
-        version: 1.2.1
-      eslint:
-        specifier: ^9.30.1
-        version: 9.30.1(jiti@2.4.2)
-      globals:
-        specifier: ^16.3.0
-        version: 16.3.0
-      ioredis:
-        specifier: ^5.6.1
-        version: 5.6.1
-      prettier:
-        specifier: ^3.6.2
-        version: 3.6.2
-      tsup:
-        specifier: ^8.5.0
-        version: 8.5.0(jiti@2.4.2)(postcss@8.5.6)(typescript@5.8.3)
-      typescript:
-        specifier: ^5.8.3
-        version: 5.8.3
-      vitest:
-        specifier: ^3.2.4
-        version: 3.2.4(@types/node@24.0.13)(jiti@2.4.2)(lightningcss@1.30.1)
-
   packages/rest:
     dependencies:
       '@ts-fetcher/types':
@@ -137,58 +91,6 @@ importers:
       '@ts-fetcher/cache':
         specifier: workspace:^
         version: link:../cache
-      '@types/node':
-        specifier: ^24.0.12
-        version: 24.0.13
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^8.36.0
-        version: 8.36.0(@typescript-eslint/parser@8.36.0(eslint@9.30.1(jiti@2.4.2))(typescript@5.8.3))(eslint@9.30.1(jiti@2.4.2))(typescript@5.8.3)
-      '@typescript-eslint/parser':
-        specifier: ^8.36.0
-        version: 8.36.0(eslint@9.30.1(jiti@2.4.2))(typescript@5.8.3)
-      esbuild-plugin-version-injector:
-        specifier: ^1.2.1
-        version: 1.2.1
-      eslint:
-        specifier: ^9.30.1
-        version: 9.30.1(jiti@2.4.2)
-      globals:
-        specifier: ^16.3.0
-        version: 16.3.0
-      ioredis:
-        specifier: ^5.6.1
-        version: 5.6.1
-      prettier:
-        specifier: ^3.6.2
-        version: 3.6.2
-      tsup:
-        specifier: ^8.5.0
-        version: 8.5.0(jiti@2.4.2)(postcss@8.5.6)(typescript@5.8.3)
-      typescript:
-        specifier: ^5.8.3
-        version: 5.8.3
-      vitest:
-        specifier: ^3.2.4
-        version: 3.2.4(@types/node@24.0.13)(jiti@2.4.2)(lightningcss@1.30.1)
-
-  packages/ts-fetcher:
-    dependencies:
-      '@ts-fetcher/cache':
-        specifier: workspace:^
-        version: link:../cache
-      '@ts-fetcher/rest':
-        specifier: workspace:^
-        version: link:../rest
-      '@ts-fetcher/types':
-        specifier: workspace:^
-        version: link:../types
-    devDependencies:
-      '@eslint/eslintrc':
-        specifier: ^3.3.1
-        version: 3.3.1
-      '@eslint/js':
-        specifier: ^9.30.1
-        version: 9.30.1
       '@types/node':
         specifier: ^24.0.12
         version: 24.0.13
