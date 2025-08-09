@@ -1,6 +1,5 @@
 import type { LiteralEnum } from '@/utility';
 import type { RequestInterceptor, ResponseInterceptor } from '@/rest/interceptors';
-import type { BaseCacheService } from '@/cache';
 
 // ==================== Interceptors ====================
 export interface InterceptorConfiguration {
@@ -30,15 +29,6 @@ export type HttpMethodType = LiteralEnum<typeof HttpMethod>;
 
 // ==================== Request/Response Types ====================
 
-export interface CacheConfiguration {
-  cacheKey: string;
-  ttl?: number;
-  /**
-   * If provided it will refetch query even if cached
-   */
-  force?: boolean;
-}
-
 export interface BaseRequestOptions<
   BodyData = unknown,
   Method extends HttpMethodType = HttpMethodType,
@@ -53,9 +43,6 @@ export interface BaseRequestOptions<
   body?: BodyData;
   credentials?: RequestCredentials;
 
-  // Cache configuration
-  caching?: CacheConfiguration;
-
   // Browser fetch options
   cookie?: string;
   destination?: RequestDestination;
@@ -69,22 +56,9 @@ export interface BaseRequestOptions<
   clone?: () => Request;
 }
 
-interface RefetchRequestOptions {
+export interface RefetchRequestOptions {
   delay: number;
   attemps: number;
-}
-
-export interface OnRequestInitReturn {
-  forceReturn?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any;
-}
-
-export interface RequestLifecycleOptions {
-  onRequestInit: <REQ extends EnhancedRequestOptions = EnhancedRequestOptions>(
-    requestOptions: REQ,
-    restOptions?: Partial<RestClientConfiguration>
-  ) => Promise<OnRequestInitReturn>;
 }
 
 export interface EnhancedRequestOptions<
@@ -94,7 +68,6 @@ export interface EnhancedRequestOptions<
 > extends BaseRequestOptions<BodyData, Method> {
   interceptors?: InterceptorConfiguration;
   refetch?: RefetchRequestOptions;
-  lifecycle?: Partial<RequestLifecycleOptions>;
 }
 
 // ==================== Response Types ====================
@@ -105,14 +78,12 @@ export interface ApiResponse<
 > {
   success: boolean;
   data: ResponseData;
-  cached: boolean;
   raw: Response;
   options: EnhancedRequestOptions<BodyData, Method>;
 }
 
 // ==================== Instance Configuration ====================
 export interface RestClientConfiguration {
-  caching?: BaseCacheService;
   interceptors?: InterceptorConfiguration;
   defaultRequestOptions?: Partial<EnhancedRequestOptions>;
 }

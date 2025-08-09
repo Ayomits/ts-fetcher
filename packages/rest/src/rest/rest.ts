@@ -1,6 +1,6 @@
 import { ApiResponse, EnhancedRequestOptions, RestClientConfiguration } from '@ts-fetcher/types';
 import { chainRequestInterceptors, chainResponseInterceptors, sleepWithCallback } from '../';
-import { defaultRequestOptions, defaultRestOptions } from './options';
+import { defaultRequestOptions } from './options';
 
 type RequestOptions<REQ> = Omit<Partial<EnhancedRequestOptions<REQ>>, 'origin' | 'method' | 'path'>;
 
@@ -71,49 +71,6 @@ export class Rest {
       options = chainRequestInterceptors(options, interceptors.request);
     }
 
-    // ==================CACHE RESPONSE==================
-    if (!this.restOptions.caching && options.caching) {
-      throw new Error('Rest caching options is not provided!');
-    }
-
-    if (this.restOptions.caching && options.caching && !options.caching.force) {
-      const valueFromCache = await this.restOptions.caching?.get<ApiResponse<RES>>?.(
-        options.caching.cacheKey
-      );
-      if (valueFromCache) {
-        const raw =
-          this.restOptions.interceptors?.executeOnCached || options.interceptors?.executeOnCached
-            ? this.responseWithInterceptors(valueFromCache, interceptors)
-            : valueFromCache;
-        return {
-          ...raw,
-          cached: true,
-        };
-      }
-    }
-
-    if (options.lifecycle?.onRequestInit) {
-      const requestInit = await options.lifecycle.onRequestInit(options, this.restOptions);
-      if (requestInit.forceReturn) {
-        const response = this.responseWithInterceptors<RES>(
-          this.makeResponse(requestInit.data, options, false, true),
-          interceptors
-        );
-
-        this.makeRequest(options);
-
-        if (options.caching) {
-          await this.restOptions.caching?.set(
-            options.caching?.cacheKey,
-            response,
-            options.caching?.ttl ?? Infinity
-          );
-        }
-
-        return response;
-      }
-    }
-
     //=================REFETCH===================
     let response = await this.makeRequest(options);
 
@@ -141,30 +98,12 @@ export class Rest {
       }
     }
 
-    //================REQUEST END================
-    const formated = this.makeResponse(
-      await this.parseJsonResponse(response),
+    return {
+      data: await this.parseJsonResponse(response),
+      success: response.ok,
+      raw: response,
       options,
-      true,
-      response.ok,
-      response
-    );
-
-    if (options.caching && this.restOptions.caching) {
-      await this.restOptions.caching.set(
-        options.caching.cacheKey,
-        formated,
-        options.caching.ttl ?? Infinity
-      );
-    }
-
-    return this.responseWithInterceptors(
-      {
-        ...formated,
-        cached: false,
-      },
-      interceptors
-    );
+    };
   }
 
   public async makeRequest<REQ extends EnhancedRequestOptions = EnhancedRequestOptions>(
@@ -180,23 +119,6 @@ export class Rest {
         body,
       }
     );
-  }
-
-  public makeResponse<REQ extends EnhancedRequestOptions = EnhancedRequestOptions>(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data: any,
-    options: REQ,
-    cached = false,
-    success = true,
-    raw: Response = new Response()
-  ): ApiResponse<typeof data, REQ, typeof options.method> {
-    return {
-      data,
-      cached,
-      success,
-      raw,
-      options,
-    };
   }
 
   public responseWithInterceptors<RES = unknown>(
@@ -216,13 +138,6 @@ export class Rest {
       request: [...reqInterceptors, ...(options.interceptors?.request ?? [])],
       response: [...resInterceptors, ...(options.interceptors?.response ?? [])],
     };
-  }
-
-  public async invalidate(cacheKey: string) {
-    if (!this.restOptions.caching) {
-      throw new Error('Cache is not provided!');
-    }
-    await this.restOptions.caching.delete(cacheKey);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
