@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@ts-fetcher/cache",
+  "name": "@ts-fetcher/storage",
   "version": "1.5.2",
   "description": "Cache package for ts-fetch",
   "main": "./dist/index.js",

@@ -1,4 +1,4 @@
-import { RestClientConfiguration } from '@ts-fetcher/types';
+import type { RestClientConfiguration } from '@ts-fetcher/types';
 import { Rest } from './rest';
 
 export interface CreateRestInstanceOptions<I extends Rest = Rest>
