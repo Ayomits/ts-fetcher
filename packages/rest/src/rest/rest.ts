@@ -46,7 +46,7 @@ export class Rest {
   public async patch<RES = unknown, REQ = unknown>(path: string, options?: RequestOptions<REQ>) {
     return await this.request<RES>({
       path,
-      method: 'DELETE',
+      method: 'PATCH',
       ...options,
     });
   }
